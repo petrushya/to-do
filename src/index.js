@@ -1,6 +1,12 @@
 import '../assets/style.css';
 import brand from '../assets/brand.svg';
 import { createMenu } from '../data/createmenu.js';
+import { articlesData } from '../data/writearticle.js';
+
+localStorage.clear();
+new articlesData('','','','daily job').addArticleData;
+new articlesData('mydaily','','','some one').addArticleData;
+new articlesData('mydaily','','','else some one').addArticleData;
 
 const headerNode = document.querySelector('header');
 const logo = new Image();
