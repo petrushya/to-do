@@ -1,12 +1,34 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>Webpack App</title>
-    </head>
-    <body>
-        <h1>Hello world!</h1>
-        <h2>Tip: Check your console</h2>
-    </body>
-    
+  <head>
+    <meta charset="utf-8" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div id="headerContent" class="wrapper">
+      <header>
+        <h1>routine</h1>
+      </header>
+    </div>
+    <hr>
+    <div id="mainContent" class="wrapper">
+      <main>
+        <div class="pagehead">
+          <nav class="pagenav"><ol>
+            <li><button id="btnexpand" type="button">my projects</button>
+              <nav id="navexpand"><ol></ol></nav>
+            </li>
+            <li><button  id="linktoday">today's</button></li>
+          </ol></nav>
+          <button id="dialogBtn" type="button" name="dialogButton">create note</button>
+        </div>
+        <h1></h1>
+        <section></section>
+      </main>
+    </div>
+    <hr>
+    <div id="footerContent" class="wrapper">
+    </div>
+  </body>
 </html>

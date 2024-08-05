@@ -1,0 +1,99 @@
+*{
+  box-sizing: border-box;
+  font-family: sans-serif;
+  color: #3a0050;
+}
+.wrapper{
+  max-inline-size: 80ch;
+  margin: 0 auto;
+  padding: 0 0.125em;
+}
+h1, h2, h3, h4, h5{
+  text-transform: uppercase;
+  font-style: oblique;
+  margin: 0.25em 0;
+}
+header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2.5%;
+  & h1{
+    font-size: 3rem;
+  }
+}
+main{
+  min-block-size: 75vb;
+}
+main, section, .card{
+  display: flex;
+  flex-direction: column;
+}
+main h1{
+  align-self: center;
+}
+button{
+  font-size: 1.25rem;
+  font-weight: bold;
+  font-variant: small-caps;
+  padding: 0.15lh 0.5ch;
+  cursor: pointer;
+}
+.pagehead{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5% 1rem;
+  z-index: 1;
+}
+.pagenav ol{
+  display: flex;
+  column-gap: 1vi;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#linktoday, #btnexpand{
+  border-radius: 0;
+  border: thin solid #3a0050;
+  background-color: #fff;
+}
+#btnexpand{
+  inline-size:12.5ch;
+}
+#navexpand{
+  position: absolute;
+  top: 5.5lh;
+  block-size: 1.5lh;
+  z-index: -1;
+  transition: 300ms;
+  & li{
+    rotate: x 90deg;
+    block-size: 0;
+    padding-block-start: 0;
+    transition: 300ms;
+  }
+  & button{
+    inline-size:12.45ch;
+    border-radius: 0;
+    border: thin solid #3a0050;
+    background-color: #fff;
+  }
+}
+#btnexpand:is(:hover, :focus) + #navexpand, #btnexpand + #navexpand:is(:hover, :focus-within){
+  top: 7lh;
+  block-size: 6.5lh;
+  & li{
+    rotate: x 0deg;
+    padding-block-start: 0.5rem;
+    block-size: auto;
+  }
+}
+#navexpand ol{
+  flex-direction: column;
+  background-color: #fff;
+}
+section{
+  border-block-start: thick double #3a0050;
+  border-block-end: thick double #3a0050;
+}
