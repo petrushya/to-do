@@ -1,5 +1,6 @@
 import '../assets/style.css';
 import brand from '../assets/brand.svg';
+import { createMenu } from '../data/createmenu.js';
 
 const headerNode = document.querySelector('header');
 const logo = new Image();
@@ -13,6 +14,4 @@ const todaylink = document.querySelector('#linktoday');
 const basicElemNode = document.querySelector('section');
 mainTitle.textContent = 'today\'s list';
 basicElemNode.id = 'today';
-if(localStorage.getItem('jsonArticlesData')){
-  new createMenu(localStorage.getItem('jsonArticlesData')).menuProject;
-};
+new createMenu(localStorage.getItem('jsonArticlesData')).menuProject;
