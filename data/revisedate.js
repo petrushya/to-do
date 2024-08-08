@@ -28,7 +28,7 @@ export class reviseDate {
   }
   get sortFullDate(){
     return `${this.fullDate}T${this.hourMinute}`;
-  };
+  }
   get intlFullDate(){
     return (new Intl.DateTimeFormat('en-US', {weekday: 'short',year: 'numeric', month: 'long', day: '2-digit'}).format(new Date(this.oneDate)));
   }
