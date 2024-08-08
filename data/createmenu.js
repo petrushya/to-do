@@ -9,7 +9,8 @@ export class createMenu{
       namesMenuElement.forEach(item => {
         const menuLi = document.createElement('li');
         const menuElement = document.createElement('button');
-        menuElement.id = `link${item}`;
+        menuElement.className = 'contentbtn';
+        menuElement.dataset.link = item;
         menuElement.textContent = item;
         menuElement.setAttribute('type','button');
         olList.appendChild(menuLi);
