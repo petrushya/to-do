@@ -1,7 +1,8 @@
 export class articlesData {
-  constructor(projectName, dataArticle){
+  constructor(projectName, dataArticle, newDataArticle){
     this.projectName = projectName.trim() ? projectName.trim() : 'routine';
     this.dataArticle = dataArticle;
+    this.newDataArticle = newDataArticle ? newDataArticle : false;
   }
 
 #articleArray(){
@@ -27,6 +28,14 @@ export class articlesData {
       storageObject[this.projectName].push(this.#articleArray().join('",,,"'));
       storageObject[this.projectName].sort();
     };
+    localStorage.setItem('todoList', JSON.stringify(storageObject));
+  }
+
+  get changeArticleData(){
+    const storageObject = JSON.parse(localStorage.getItem('todoList'));
+    const stringData = storageObject[this.projectName];
+    stringData[stringData.indexOf(this.dataArticle)] = this.newDataArticle;
+    if(+stringData[0].split('",,,"')[0] !== +this.newDataArticle.split('",,,"')[0]) stringData.sort();
     localStorage.setItem('todoList', JSON.stringify(storageObject));
   }
 
