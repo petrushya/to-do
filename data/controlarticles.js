@@ -1,6 +1,7 @@
 import { reviseDate } from './revisedate.js';
 import { printContent } from './printcontent.js';
 import { articlesData } from './writearticle.js';
+import { createDialog } from './dialogwindow.js';
 
 export class controlArticles{
   constructor(stringData, storageKey, pageLink){
@@ -46,7 +47,7 @@ export class controlArticles{
       prioritySpan.innerHTML = '&#x272d;&#x272d;';
     };
     if(this.pageLink !== 'today'){
-      reviseButton.id = 'revise'
+      reviseButton.className = 'revise'
       reviseButton.setAttribute('type', 'button');
     };
     deletButton.className = 'deletarticle';
@@ -70,6 +71,11 @@ export class controlArticles{
       notePart.appendChild(notePara)
     };
     timeSpan.textContent = new reviseDate(+arrayData[0]).intlHour;
+
+    reviseButton.onclick = () => {
+      reviseButton.blur();
+      new createDialog(reviseButton.className, arrayData).showDialog;
+    };
 
     checkSpan.addEventListener('click', () => {
       if(checkSpan.classList.contains('nonchecked')){
@@ -120,6 +126,7 @@ export class controlArticles{
         olList.appendChild(menuLi);
         menuLi.appendChild(menuElement);
         menuElement.onclick = () => {
+          menuElement.blur();
           new printContent('', menuElement.dataset.link).pageContent;
         };
       });
@@ -131,6 +138,10 @@ export class controlArticles{
     btnElement.setAttribute('type','button');
     olList.appendChild(btnLi);
     btnLi.appendChild(btnElement);
+    btnElement.onclick = () => {
+      btnElement.blur();
+      new createDialog(btnElement.id).showDialog;
+    };
   }
 
 

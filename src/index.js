@@ -2,6 +2,7 @@ import '../assets/style.css';
 import brand from '../assets/brand.svg';
 import { articlesData } from '../data/writearticle.js';
 import { printContent } from '../data/printcontent.js';
+import { createDialog } from '../data/dialogwindow.js';
 
 localStorage.clear();
 new articlesData(' ',['','','','daily job'].join('",,,"')).addArticleData;
@@ -21,6 +22,12 @@ new printContent('today').pageContent;
 
 const todayBtn = document.querySelector('#todaylink');
 todayBtn.onclick = () => {
-  new printContent('today').pageContent;
   todayBtn.blur();
+  new printContent('today').pageContent;
 }
+
+const dialogBtn = document.querySelector('#dialogBtn');
+dialogBtn.onclick = () => {
+  dialogBtn.blur();
+  new createDialog(dialogBtn.id).showDialog;
+};
