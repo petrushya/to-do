@@ -1,5 +1,4 @@
 import { reviseDate } from './revisedate.js';
-import { printContent } from './printcontent.js';
 import { articlesData } from './writearticle.js';
 import { createDialog } from './dialogwindow.js';
 
@@ -26,11 +25,13 @@ export class controlArticles{
     article.className = 'card';
     mainPart.className = 'mainArticle';
     checkSpan.setAttribute('tabindex', 0);
-    arrayData[1] === 'nonchecked' ? checkSpan.className = 'nonchecked' : checkSpan.className = 'checked';
+    checkSpan.className = 'status';
+    arrayData[1] === 'nonchecked' ? checkSpan.classList.add('nonchecked') : checkSpan.classList.add('checked');
     timeSpan.className = 'hourdate';
     timeSpan.setAttribute('datetime', new reviseDate(+arrayData[0]).sortFullDate);
     if(checkSpan.classList.contains('checked')){
-      timeSpan.classList.add('isreade');
+      timeSpan.classList.add('isready');
+      contentPara.className = 'paraready';
     }else if(new reviseDate(+arrayData[0]).overdueTime && !new reviseDate(+arrayData[0]).equalDate){
       timeSpan.classList.add('expired');
     }else if(new reviseDate(+arrayData[0]).overdueTime){
@@ -78,36 +79,12 @@ export class controlArticles{
     };
 
     checkSpan.addEventListener('click', () => {
-      if(checkSpan.classList.contains('nonchecked')){
-        checkSpan.classList.remove('nonchecked');
-        checkSpan.classList.add('checked');
-        if(timeSpan.classList.contains('expired')){
-          timeSpan.classList.remove('expired');
-        }else if(timeSpan.classList.contains('towork')){
-          timeSpan.classList.remove('towork');
-        };
-        timeSpan.classList.add('isreade');
-        checkSpan.innerHTML = '&#x2611';
-        arrayData[1] = 'checked';
-      }else{
-        checkSpan.classList.remove('checked');
-        checkSpan.classList.add('nonchecked');
-        checkSpan.innerHTML = '&#x2610;';
-        arrayData[1] = 'nonchecked'
-        timeSpan.classList.remove('isreade');
-        if(new reviseDate(+arrayData[0]).overdueTime && !new reviseDate(+arrayData[0]).equalDate){
-          timeSpan.classList.add('expired');
-        }else if(new reviseDate(+arrayData[0]).overdueTime){
-          timeSpan.classList.add('towork');
-        };
-      };
+      arrayData[1] === 'nonchecked' ? arrayData[1] = 'checked' : arrayData[1] = 'nonchecked';
       new articlesData(this.storageKey, this.stringData, arrayData.join('",,,"')).changeArticleData;
-      new printContent(this.pageLink, this.storageKey).pageContent;
     });
 
     deletButton.addEventListener('click', () => {
       new articlesData(this.storageKey, this.stringData).deletArticle;
-      new printContent(this.pageLink, this.storageKey).pageContent;
     });
     return article;
   }
@@ -125,10 +102,6 @@ export class controlArticles{
         menuElement.setAttribute('type','button');
         olList.appendChild(menuLi);
         menuLi.appendChild(menuElement);
-        menuElement.onclick = () => {
-          menuElement.blur();
-          new printContent('', menuElement.dataset.link).pageContent;
-        };
       });
     };
     const btnLi = document.createElement('li');
@@ -143,6 +116,5 @@ export class controlArticles{
       new createDialog(btnElement.id).showDialog;
     };
   }
-
 
 }

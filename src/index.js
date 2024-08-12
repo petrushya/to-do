@@ -6,10 +6,10 @@ import { createDialog } from '../data/dialogwindow.js';
 
 localStorage.clear();
 new articlesData(' ',['','','','daily job'].join('",,,"')).addArticleData;
-new articlesData('mydaily',['','','','some one', 'lorem ipsum carent dolor:\n 1. something else'].join('",,,"')).addArticleData;
-new articlesData('mydaily',['','','','else some one'].join('",,,"')).addArticleData;
-new articlesData('mydaily',[`${new Date().valueOf() + 16*60*60*1000}`,'','','ooo some one'].join('",,,"')).addArticleData;
-new articlesData('mydaily',[new Date().valueOf() - 24*60*60*1000,'','','ooo else some one'].join('",,,"')).addArticleData;
+new articlesData('my lessons',['','','','some one', 'lorem ipsum carent dolor:\n 1. something else'].join('",,,"')).addArticleData;
+new articlesData('my lessons',['','','low','else some one'].join('",,,"')).addArticleData;
+new articlesData('my lessons',[`${new Date().valueOf() + 16*60*60*1000}`,'','high','ooo some one'].join('",,,"')).addArticleData;
+new articlesData('my lessons',[new Date().valueOf() - 24*60*60*1000,'','low','ooo else some one'].join('",,,"')).addArticleData;
 
 const headerNode = document.querySelector('header');
 const logo = new Image();
@@ -31,3 +31,4 @@ dialogBtn.onclick = () => {
   dialogBtn.blur();
   new createDialog(dialogBtn.id).showDialog;
 };
+

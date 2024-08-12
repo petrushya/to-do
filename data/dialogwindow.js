@@ -68,7 +68,7 @@ export class createDialog{
     lowOption.value = 'low';
     lowOption.textContent = 'low';
     nameProject.name = 'project name';
-    nameProject.setAttribute('maxlength', '35');
+    nameProject.setAttribute('maxlength', '15');
     if(this.btnId === 'createproject' || this.btnId !== 'dialogBtn') nameProject.required = 'required';
     if(this.array){
       Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(key => {

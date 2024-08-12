@@ -34,8 +34,9 @@ export class articlesData {
   get changeArticleData(){
     const storageObject = JSON.parse(localStorage.getItem('todoList'));
     const stringData = storageObject[this.projectName];
-    stringData[stringData.indexOf(this.dataArticle)] = this.newDataArticle;
-    if(+stringData[0].split('",,,"')[0] !== +this.newDataArticle.split('",,,"')[0]) stringData.sort();
+    const sortDate = stringData;
+    sortDate[stringData.indexOf(this.dataArticle)] = this.newDataArticle;
+    if(+stringData[0].split('",,,"')[0] !== +sortDate[0].split('",,,"')[0]) sortDate.sort();
     localStorage.setItem('todoList', JSON.stringify(storageObject));
   }
 
