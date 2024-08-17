@@ -43,7 +43,6 @@ export class articlesData {
   get deletArticle(){
     const storageObject = JSON.parse(localStorage.getItem('todoList'));
     storageObject[this.projectName].splice(storageObject[this.projectName].indexOf(this.dataArticle), 1);
-    if(storageObject[this.projectName].length === 0) delete storageObject[this.projectName];
     localStorage.setItem('todoList', JSON.stringify(storageObject));
   }
 }

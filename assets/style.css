@@ -42,7 +42,7 @@ button{
 .pagehead{
   display:flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 0 5% 1rem;
   z-index: 1;
 }
@@ -103,7 +103,7 @@ section{
   border-block-end: thick double #3a0050;
   padding-block-end: 0.5rem;
   & > div{
-    padding-inline-start: 5%;
+    padding: 0 5%;
     padding-block-start: 1rem;
     margin-block-start: 0.5rem;
     border-block-start: medium double #3a0050;
@@ -119,6 +119,11 @@ section div + .card{
 }
 section > div:first-child{
   border-block-start: thick double #3a0050;
+}
+.projblock{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 .card{
   inline-size: 90%;
@@ -196,6 +201,10 @@ section > div:first-child{
     outline: thick solid #ffd700;
     background-color: #dc143c;
     color: #fff;
+  }
+  &.towork.expired{
+    background-color: #ffffbb;
+    color: inherit;
   }
 }
 .paraready{
