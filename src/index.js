@@ -4,7 +4,7 @@ import { articlesData } from '../data/writearticle.js';
 import { printContent } from '../data/printcontent.js';
 
 localStorage.clear();
-new articlesData(' ',['','','','daily job'].join('",,,"')).addArticleData;
+new articlesData('',['','','','daily job'].join('",,,"')).addArticleData;
 new articlesData('my lessons',[`${new Date().valueOf() - 60*60*1000}`,'','','some one', 'lorem ipsum carent dolor:\n 1. something else'].join('",,,"')).addArticleData;
 new articlesData('my lessons',[`${new Date().valueOf() - 90*60*1000}`,'','','new some one', 'lorem ipsum carent dolor:\n 1. something else\n2. else something else'].join('",,,"')).addArticleData;
 new articlesData('my lessons',[`${new Date().valueOf() + 60*60*1000}`,'','high','else else some one'].join('",,,"')).addArticleData;

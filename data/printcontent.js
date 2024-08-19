@@ -42,11 +42,6 @@ export class printContent {
     }else if(!Object.keys(JSON.parse(localStorage.getItem('todoList'))).includes(this.projectName)){
       mainTitle.textContent = `${this.projectName} deleted`;
     }else if(JSON.parse(localStorage.getItem('todoList'))[this.projectName]){
-      if(JSON.parse(localStorage.getItem('todoList'))[this.projectName].length === 0){
-        mainTitle.textContent = `${this.projectName} list is empty`;
-      }else{
-        const dataProject = JSON.parse(localStorage.getItem('todoList'))[this.projectName];
-        mainTitle.textContent = this.projectName;
       const projBtnBlock = document.createElement('div');
       const projectTitle = document.createElement('h2');
       projectTitle.textContent = 'to do list';
@@ -55,6 +50,11 @@ export class printContent {
       projBtnBlock.appendChild(projectTitle);
       projBtnBlock.appendChild(this.#delProject());
       section.prepend(projBtnBlock);
+      if(JSON.parse(localStorage.getItem('todoList'))[this.projectName].length === 0){
+        mainTitle.textContent = `${this.projectName} list is empty`;
+      }else{
+        const dataProject = JSON.parse(localStorage.getItem('todoList'))[this.projectName];
+        mainTitle.textContent = this.projectName;
         dataProject.forEach((item, index) => {
           const itemArr = item.split('",,,"');
           if(!dataProject[index - 1] || !new reviseDate(+dataProject[index - 1].split('",,,"')[0],+itemArr[0]).equalDate){
@@ -141,6 +141,9 @@ export class printContent {
       const obj = JSON.parse(localStorage.getItem('todoList'));
       delete obj[this.projectName];
       localStorage.setItem('todoList', JSON.stringify(obj));
+      const objProj = JSON.parse(localStorage.getItem('projList'));
+      delete objProj[this.projectName];
+      localStorage.setItem('projList', JSON.stringify(objProj));
       this.pageContent;
     };
     return deleteProject;
