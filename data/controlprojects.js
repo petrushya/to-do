@@ -1,42 +1,92 @@
 import { reviseDate } from './revisedate.js';
+import { createDialog } from './dialogwindow.js';
+import { articlesData } from './writearticle.js';
 
 export class controlprojects{
-  constructor(storageKey){
+  constructor(storageKey, pageLink){
     this.storageKey = storageKey;
+    this.pageLink = pageLink;
   }
   get extractDiv(){
-    const arrayData = JSON.parse(localStorage.getItem('projList'))[this.storageKey].toString().split('",,,"');
+    const projData = JSON.parse(localStorage.getItem('projList'))[this.storageKey].toString().split('",,,"');
     const projectDiv = document.createElement('div');
     const projectCap = document.createElement('div');
-    const projectDateCap = document.createElement('p');
+    const projectStartCap = document.createElement('span');
     const projectDate = document.createElement('time');
-    const projectPas = document.createElement('span');
-    const projectInfo = document.createElement('div');
+    const wrapCap = document.createElement('div');
+    const pasStart = document.createElement('span');
+    const projectPas = document.createElement('p');
+    const wrapPas = document.createElement('div');
+    const projectInfo = document.createElement('span');
     const projectNote = document.createElement('p');
+    const wrapInfo = document.createElement('div');
 
     projectDiv.className = 'projectart';
     projectCap.className = 'projectcap';
-    projectDateCap.className = 'projdatecap';
-    projectPas.className = 'projectpas';
-    projectInfo.className = 'projectinfo';
+    wrapCap.className = wrapPas.className = wrapInfo.className = 'wrapping';
 
-    projectDateCap.textContent = 'end time: ';
-    projectDate.textContent = arrayData[0] !== 'Indefinite' ? new reviseDate(+arrayData[0]).fullDate : arrayData[0];
-    if(arrayData[2] === 'high'){
-      projectPas.innerHTML = '&#x272d;&#x272d;&#x272d;';
-      projectPas.classList = 'high';
-    }else{
-      projectPas.innerHTML = '&#x272d;&#x272d;';
+    projectStartCap.textContent = 'Deadline: ';
+    projectDate.textContent = projData[0] !== '' ? new reviseDate(+projData[0]).intlFullDate : 'Indefinite';
+    pasStart.textContent = 'Notify: ';
+    if(projData[1] === 'low' || projData[0] === ''){
+      projectPas.textContent = 'do not notify';
+    }else if(projData[1] === 'normal'){
+      projectPas.textContent = 'a day earlier';
+    }else if(projData[1] === 'high'){
+      projectPas.textContent = 'three days earlier';
     };
-    projectNote.innerText = `information:\n${arrayData[3]}`;
+    projectInfo.textContent = 'Information:';
 
     projectDiv.append(projectCap);
-    projectDiv.append(projectInfo);
-    projectCap.append(projectDateCap);
-    projectDateCap.append(projectDate);
-    projectCap.append(projectPas);
-    projectInfo.append(projectNote);
+    projectCap.append(wrapCap);
+    wrapCap.append(projectStartCap);
+    wrapCap.append(projectDate);
+    projectCap.append(wrapPas);
+    wrapPas.append(pasStart);
+    wrapPas.append(projectPas);
+
+    if(this.pageLink === 'allprojects'){
+      projectDiv.append(wrapInfo);
+      wrapInfo.append(projectInfo);
+      projectNote.innerText = projData[2] !== '' ? projData[2] : 'Non Description!';
+      wrapInfo.append(projectNote);
+    };
 
     return projectDiv;
+  }
+
+  get reviseButton(){
+    if(this.pageLink === 'allprojects'){
+      const projData = JSON.parse(localStorage.getItem('projList'))[this.storageKey].toString().split('",,,"');
+      const projectRevise = document.createElement('button');
+      projectRevise.className = 'reviseproj';
+      projectRevise.dataset.projlink = this.storageKey;
+      projectRevise.setAttribute('type', 'button');
+      projectRevise.innerHTML = '&#x1f4cb;';
+      projectRevise.addEventListener('click', (e) => {
+        new createDialog(projectRevise.className, projData, e.target.dataset.projlink).showDialog;
+      });
+    return projectRevise;
+    };
+  }
+
+  get deletButton(){
+    if(this.pageLink === 'allprojects'){
+      const deleteProject = document.createElement('button');
+      deleteProject.className = 'delproject';
+      deleteProject.dataset.projlink = this.storageKey;
+      deleteProject.type = 'button';
+      deleteProject.name = 'delete project';
+      deleteProject.innerHTML = '&#x1F5D1;';
+      deleteProject.addEventListener('click', (e) => {
+        const obj = JSON.parse(localStorage.getItem('todoList'));
+        delete obj[e.target.dataset.projlink];
+        localStorage.setItem('todoList', JSON.stringify(obj));
+        const objProj = JSON.parse(localStorage.getItem('projList'));
+        delete objProj[e.target.dataset.projlink];
+        localStorage.setItem('projList', JSON.stringify(objProj));
+      });
+      return deleteProject;
+    };
   }
 }
