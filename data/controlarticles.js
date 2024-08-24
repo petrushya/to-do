@@ -1,7 +1,6 @@
 import { reviseDate } from './revisedate.js';
 import { articlesData } from './writearticle.js';
 import { createDialog } from './dialogwindow.js';
-import { printContent } from './printcontent.js';
 
 export class controlArticles{
   constructor(stringData, storageKey, pageLink){
@@ -84,7 +83,6 @@ export class controlArticles{
       reviseButton.onclick = () => {
         reviseButton.blur();
         new createDialog(reviseButton.className, arrayData).showDialog;
-//        new printContent('', this.storageKey).pageContent;
       };
       mainPart.appendChild(reviseButton);
     };
