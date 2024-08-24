@@ -14,16 +14,16 @@ export class reviseDate {
   }
   get hourMinute(){
     const hour = new Date(this.oneDate).getHours();
-    const inputHour = (0 < hour && hour < 10) ? `0${hour}` : `${hour}`;
+    const inputHour = (0 <= hour && hour < 10) ? `0${hour}` : `${hour}`;
     const minute = new Date(this.oneDate).getMinutes();
-    const inputMinute = (0 < minute && minute < 10) ? `0${minute}`: `${minute}`;
+    const inputMinute = (0 <= minute && minute < 10) ? `0${minute}`: `${minute}`;
     return `${inputHour}:${inputMinute}`;
   }
   get fullDate(){
     const month = new Date(this.oneDate).getMonth();
-    const inputMonth = (0 < month && month < 10) ? `0${month+1}` : `${month+1}`;
+    const inputMonth = (0 <= month && month < 10) ? `0${month+1}` : `${month+1}`;
     const date = new Date(this.oneDate).getDate();
-    const inputDate = (0 < date && date < 10) ? `0${date}`: `${date}`;
+    const inputDate = (0 <= date && date < 10) ? `0${date}`: `${date}`;
     return (`${new Date(this.oneDate).getFullYear()}-${inputMonth}-${inputDate}`);
   }
   get sortFullDate(){
