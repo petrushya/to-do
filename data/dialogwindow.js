@@ -3,9 +3,10 @@ import { articlesData } from './writearticle.js';
 import { printContent } from './printcontent.js';
 
 export class createDialog{
-  constructor(btnId, array){
+  constructor(btnId, array, nameProj){
     this.btnId = btnId ? btnId : '';
     this.array = array ? array : '';
+    this.nameProj = nameProj ? nameProj : '';
   }
 
   get showDialog(){
@@ -14,18 +15,20 @@ export class createDialog{
     dialog.showModal();
     const canselBtn = document.querySelector('.dialogclose');
     const confirmBtn = document.querySelector('#confirmbtn');
-    if(this.btnId === 'createproject'){
-      const nameProject = document.querySelector('#nameProject');
-      const spanName = document.querySelector('#spanName');
+    if(this.btnId.includes('proj')){
+      if(this.btnId === 'createproject'){
+        const nameProject = document.querySelector('#nameProject');
+        const spanName = document.querySelector('#spanName');
 
-      nameProject.addEventListener('input', () => {
-        if(nameProject.classList.contains('error')) nameProject.classList.remove('error');
-        if(spanName.classList.contains('error')) spanName.classList.remove('error');
-        spanName.textContent = '';
-      });
+        nameProject.addEventListener('input', () => {
+          if(nameProject.classList.contains('error')) nameProject.classList.remove('error');
+          if(spanName.classList.contains('error')) spanName.classList.remove('error');
+          spanName.textContent = '';
+        });
+      };
 
       confirmBtn.addEventListener('click', (e) => {
-        if(!nameProject.validity.valid){
+        if(!nameProject.validity.valid && this.btnId === 'createproject'){
           nameProject.className = 'error';
           spanName.className = 'error';
           spanName.textContent = 'Project name required!';
@@ -33,11 +36,17 @@ export class createDialog{
         }else{
           e.preventDefault();
           const startTime = new Date(document.querySelector('#startTime').value).valueOf() ? new Date(document.querySelector('#startTime').value).valueOf() : '';
-          const priority = document.querySelector('#priority').value;
+          const priority = startTime === '' ? 'low' : document.querySelector('#priority').value;
           const detailNote = document.querySelector('#detailNote').value ? document.querySelector('#detailNote').value : '';
-          const inputString = [startTime, 'nonchecked', priority, '', detailNote].join('",,,"');
-          new articlesData(nameProject.value, inputString).addArticleData;
-          new printContent('', nameProject.value).pageContent;
+          if(this.btnId === 'reviseproj'){
+            const inputString = [startTime, priority, detailNote].join('",,,"');
+            new articlesData(nameProject.value, inputString).changeProjData;
+            new printContent('allprojects', nameProject.value).pageContent;
+          }else if(this.btnId === 'createproject'){
+            const inputString = [startTime, '', priority, '', detailNote].join('",,,"');
+            new articlesData(nameProject.value, inputString).addArticleData;
+            new printContent('', nameProject.value).pageContent;
+          };
           dialog.close();
         };
       });
@@ -62,7 +71,7 @@ export class createDialog{
           const startTime = document.querySelector('#startTime').value ? 
 new Date(document.querySelector('#startTime').value).valueOf() : '';
           const status = '';
-          const priority = document.querySelector('#priority').value;
+          const priority = startTime === '' ? 'low' : document.querySelector('#priority').value;
           const nameProject = document.querySelector('#nameProject').value;
           const detailNote = document.querySelector('#detailNote').value ? document.querySelector('#detailNote').value : '';
           if(this.btnId === 'revise'){
@@ -89,7 +98,7 @@ new Date(document.querySelector('#startTime').value).valueOf() : '';
     const fieldset = document.createElement('fieldset');
     const legendForm = document.createElement('legend');
     const nameProjectLabel = document.createElement('label');
-    const nameProject = document.querySelector('#dialogBtn').dataset.project || this.btnId === 'createproject' ? document.createElement('input') : document.createElement('select');
+    const nameProject = this.btnId === 'dialogBtn' && this.nameProj === '' ? document.createElement('select') : document.createElement('input');
     const startTimeLabel = document.createElement('label');
     const startTime = document.createElement('input');
     const priorityLabel = document.createElement('label');
@@ -103,11 +112,17 @@ new Date(document.querySelector('#startTime').value).valueOf() : '';
     nameProjectLabel.setAttribute('for', 'nameProject');
     nameProjectLabel.textContent = 'Project Name: ';
     startTime.id = 'startTime';
-    startTime.type = this.btnId === 'createproject' ? 'date' : 'datetime-local';
+    startTime.type = this.btnId.includes('proj') ? 'date' : 'datetime-local';
     startTime.name = 'startTime';
-    startTime.value = this.array ? startTime.value = new reviseDate(+this.array[0]).sortFullDate : new reviseDate(new Date()).sortFullDate;
+    if(this.array && this.btnId.includes('proj') && new reviseDate(+this.array[0]).fullDate !== new reviseDate(0).fullDate){
+      startTime.value = new reviseDate(+this.array[0]).fullDate;
+    }else if(this.array){
+      startTime.value = new reviseDate(+this.array[0]).sortFullDate;
+    }else{
+      startTime.value = '';
+    };
     startTimeLabel.setAttribute('for', 'startTime');
-    startTimeLabel.textContent = this.btnId === 'createproject' ? 'Deadline: ' : 'Start Time: ';
+    startTimeLabel.textContent = this.btnId.includes('proj') ? 'Deadline: ' : 'Start Time: ';
     priority.name = 'priority';
     priority.id = 'priority';
     priorityLabel.setAttribute('for', 'priority');
@@ -118,36 +133,42 @@ new Date(document.querySelector('#startTime').value).valueOf() : '';
     noteForm.appendChild(fieldset);
     fieldset.appendChild(legendForm);
     fieldset.appendChild(nameProjectLabel);
-    document.querySelector('#dialogBtn').dataset.project || this.btnId === 'createproject' ? fieldset.appendChild(nameProject) : nameProjectLabel.appendChild(nameProject);
-    if(this.btnId === 'createproject'){
-      nameProject.setAttribute('maxlength', '15');
-      nameProject.required = 'required';
-      nameProjectLabel.textContent = 'Project Name (required): ';
-      const spanName = document.createElement('span');
-      spanName.id = 'spanName';
-      fieldset.appendChild(spanName);
-    }else if(this.btnId === 'dialogBtn' && document.querySelector('#dialogBtn').dataset.project){
-      nameProject.value = document.querySelector('#dialogBtn').dataset.project;
-      nameProject.setAttribute('disabled', '');
-    }else if(this.btnId === 'dialogBtn' && !document.querySelector('#dialogBtn').dataset.project){
+    this.btnId.includes('proj') ? fieldset.appendChild(nameProject) : nameProjectLabel.appendChild(nameProject);
+    if(this.btnId.includes('proj')){
+      if(this.btnId === 'reviseproj'){
+        nameProjectLabel.textContent = 'Project Name: ';
+        nameProject.setAttribute('disabled', '');
+        nameProject.value = this.nameProj;
+      }else{
+        nameProject.setAttribute('maxlength', '15');
+        nameProject.required = 'required';
+        nameProjectLabel.textContent = 'Project Name (required): ';
+        const spanName = document.createElement('span');
+        spanName.id = 'spanName';
+        fieldset.appendChild(spanName);
+      };
+    }else if(this.btnId === 'revise'){
+      Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(key => {
+        if(JSON.parse(localStorage.getItem('todoList'))[key].includes(this.array.join('",,,"')))
+        nameProject.value = key;
+        nameProject.setAttribute('disabled', '');
+      });
+    }else if(this.btnId === 'dialogBtn' && this.nameProj === ''){
       Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(key => {
         const nameProjectOption = document.createElement('option');
         nameProjectOption.value = key;
         nameProjectOption.textContent = key;
         nameProject.appendChild(nameProjectOption);
       });
+    }else{
+      nameProject.value = this.nameProj;
+      nameProject.setAttribute('disabled', '');
     };
-    if(this.array){
-      Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(key => {
-        if(JSON.parse(localStorage.getItem('todoList'))[key].includes(this.array.join('",,,"')))
-        nameProject.value = key;
-        nameProject.setAttribute('disabled', '');
-      });
-    };
+
     fieldset.appendChild(startTimeLabel);
     fieldset.appendChild(startTime);
 
-    if(this.btnId !== 'createproject'){
+    if(!this.btnId.includes('proj')){
       const summaryNoteLabel = document.createElement('label');
       const summaryNote = document.createElement('input');
       const spanNote = document.createElement('span');
@@ -156,13 +177,15 @@ new Date(document.querySelector('#startTime').value).valueOf() : '';
       const lowOption = document.createElement('option');
 
       priorityLabel.textContent = 'Task Priority: ';
-      if(this.array) priority.value = this.array[2];
       normalOption.value = 'normal';
       normalOption.textContent = 'normal';
+      if(this.array[2] === 'normal') normalOption.setAttribute('selected', '');
       highOption.value = 'high';
       highOption.textContent = 'high';
+      if(this.array[2] === 'high') highOption.setAttribute('selected', '');
       lowOption.value = 'low';
       lowOption.textContent = 'low';
+      if(this.array[2] === 'low') lowOption.setAttribute('selected', '');
       summaryNote.id = 'summaryNote';
       spanNote.id = 'spanNote';
       summaryNote.name = 'summary';
@@ -182,16 +205,23 @@ new Date(document.querySelector('#startTime').value).valueOf() : '';
       fieldset.appendChild(spanNote);
     }
 
-    if(this.btnId === 'createproject'){
-      priorityLabel.textContent = 'Priority Project: ';
+    if(this.btnId.includes('proj')){
+      priorityLabel.textContent = 'Notice of expiration: ';
       const normalOption = document.createElement('option');
       const highOption = document.createElement('option');
+      const lowOption = document.createElement('option');
+      lowOption.value = 'low';
+      lowOption.textContent = 'don\'t warn';
+      if(this.array[1] === 'low') lowOption.setAttribute('selected', '');
       normalOption.value = 'normal';
-      normalOption.textContent = 'normal';
+      normalOption.textContent = 'one day\'s';
+      if(this.array[1] === 'normal') normalOption.setAttribute('selected', '');
       highOption.value = 'high';
-      highOption.textContent = 'high';
+      highOption.textContent = 'three days';
+      if(this.array[1] === 'high') highOption.setAttribute('selected', '');
       fieldset.appendChild(priorityLabel);
       priorityLabel.appendChild(priority);
+      priority.appendChild(lowOption);
       priority.appendChild(normalOption);
       priority.appendChild(highOption);
     }
@@ -207,11 +237,12 @@ new Date(document.querySelector('#startTime').value).valueOf() : '';
     btnPara.className = 'btnwrap';
 
     detailNote.name = 'detail';
-    detailNote.rows = this.btnId === 'createproject' ? '3' : '5';
+    detailNote.rows = this.btnId.includes('proj') ? '3' : '5';
     detailNote.cols = '30';
-    if(this.array && this.array[4]) detailNote.value = this.array[4];
+    if(this.array && this.array[4] && !this.btnId.includes('proj')) detailNote.value = this.array[4];
+    if(this.array && this.array[2] && this.btnId.includes('proj')) detailNote.value = this.array[2];
     detailNoteLabel.setAttribute('for', 'detailNote');
-    detailNoteLabel.textContent = this.btnId === 'createproject' ? 'Project description: ' : 'Task Details: ';
+    detailNoteLabel.textContent = this.btnId.includes('proj') ? 'Project description: ' : 'Task Details: ';
     confirmBtn.name ='confirm entry';
     confirmBtn.value = 'confirm';
     confirmBtn.textContent = 'confirm';
