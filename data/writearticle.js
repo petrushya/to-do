@@ -1,7 +1,7 @@
 export class articlesData {
   constructor(projectName, dataArticle, newDataArticle){
     this.projectName = projectName ? projectName.trim() : 'routine';
-    this.dataArticle = dataArticle.trim();
+    this.dataArticle = dataArticle ? dataArticle.trim() : '';
     this.newDataArticle = newDataArticle ? newDataArticle.trim() : '';
   }
 
@@ -19,29 +19,41 @@ export class articlesData {
     articleArray = appArray.filter(item => item.length > 0);
   }else{
     articleArray = [
-      dataArray[0] ? dataArray[0].trim() : 'Indefinite',
-      dataArray[1] === 'checked' ? dataArray[1] : 'nonchecked',
-      dataArray[2] === 'high' ? dataArray[2] : 'normal',
-      dataArray[4] ? dataArray[4].trim() : 'No Description'
+      dataArray[0] ? dataArray[0].trim() : '',
+      (dataArray[2] === 'high' || dataArray[2] === 'normal') && dataArray[0].trim() !== '' ? dataArray[2] : 'low',
+      dataArray[4] ? dataArray[4].trim() : ''
     ];
   };
   return articleArray;
 }
+
   get addArticleData(){
     const storageObject = !localStorage.getItem('todoList') ? Object() : JSON.parse(localStorage.getItem('todoList'));
     const storProjObject = !localStorage.getItem('projList') ? Object() : JSON.parse(localStorage.getItem('projList'));
-    if(!storageObject[this.projectName]) storageObject[this.projectName] = [];
-    if(!storProjObject[this.projectName] || !storageObject[this.projectName]){
+    if(!storProjObject[this.projectName]){
+      storageObject[this.projectName] = [];
       storProjObject[this.projectName] = [];
       if(this.dataArticle.split('",,,"')[3].trim() === '') storProjObject[this.projectName].push(this.#articleArray().join('",,,"'));
-      if(this.dataArticle.split('",,,"')[3].trim() !== '') storProjObject[this.projectName].push('Indefinite",,,"No Description');
-      localStorage.setItem('projList', JSON.stringify(storProjObject));
+      if(this.dataArticle.split('",,,"')[3].trim() !== '') storProjObject[this.projectName].push('",,,"low",,,"');
+      const sortkey = [];
+      const sortObj = Object();
+      Object.keys(storProjObject).forEach(key => {
+        if(!sortkey.includes(key)) sortkey.push(key);
+      });
+      sortkey.sort().forEach(item => {
+        sortObj[item] = storProjObject[item];
+      });
+      localStorage.setItem('projList', JSON.stringify(sortObj));
     };
     if(this.dataArticle.split('",,,"')[3].trim() !== ''){
       storageObject[this.projectName].push(this.#articleArray().join('",,,"'));
       storageObject[this.projectName].sort();
     };
-    localStorage.setItem('todoList', JSON.stringify(storageObject));
+    const sortObjArt = Object();
+    Object.keys(JSON.parse(localStorage.getItem('projList'))).forEach(key => {
+      sortObjArt[key] = storageObject[key];
+    });
+    localStorage.setItem('todoList', JSON.stringify(sortObjArt));
   }
 
   get changeArticleData(){
@@ -52,6 +64,12 @@ export class articlesData {
     sortDate[stringData.indexOf(this.dataArticle)] = newData;
     if(+stringData[0].split('",,,"')[0] !== +sortDate[0].split('",,,"')[0]) sortDate.sort();
     localStorage.setItem('todoList', JSON.stringify(storageObject));
+  }
+
+  get changeProjData(){
+    const storProjObject = JSON.parse(localStorage.getItem('projList'));
+    storProjObject[this.projectName] = this.dataArticle;
+    localStorage.setItem('projList', JSON.stringify(storProjObject));
   }
 
   get deletArticle(){
