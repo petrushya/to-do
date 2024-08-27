@@ -82,7 +82,7 @@ export class controlArticles{
       reviseButton.innerHTML = '&#x1f4cb;';
       reviseButton.onclick = () => {
         reviseButton.blur();
-        new createDialog(reviseButton.className, arrayData).showDialog;
+        new createDialog(reviseButton.className, arrayData, reviseButton.dataset.link).showDialog;
       };
       mainPart.appendChild(reviseButton);
     };

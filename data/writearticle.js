@@ -18,8 +18,9 @@ export class articlesData {
     ];
     articleArray = appArray.filter(item => item.length > 0);
   }else{
+//    console.log(dataArray[0]);
     articleArray = [
-      dataArray[0].toString() ? dataArray[0].toString() : '',
+      dataArray[0].toString() !== '' ? dataArray[0].toString() : '',
       (dataArray[1] === 'high' || dataArray[1] === 'normal') && dataArray[0].toString().trim() !== '' ? dataArray[1] : 'low',
       dataArray[2] ? dataArray[2].trim() : ''
     ];
