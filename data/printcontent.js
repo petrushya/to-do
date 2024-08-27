@@ -12,24 +12,44 @@ export class printContent {
   get pageContent(){
     this.#expandMenu();
     const mainTitle = document.querySelector('main h1');
+    mainTitle.textContent = 'daily to-do list';
     if(document.querySelector('#dialogBtn')) document.querySelector('#dialogBtn').remove();
     const section = document.querySelector('section');
     section.textContent = '';
     if(Object.keys(JSON.parse(localStorage.getItem('todoList'))).length <= 0){
       mainTitle.textContent = 'no to-do lists';
+      section.textContent = '';
     }else if(this.pageLink === 'today'){
       document.querySelector('.pagehead').appendChild(this.#noteBtn());
-      mainTitle.textContent = 'today\'s to do list';
+      const sectionCap = document.createElement('div');
+      sectionCap.className = 'sticky';
+      const capTitleDiv = document.createElement('div');
+      capTitleDiv.className = 'btnwrap';
+      const capTitle = document.createElement('h2');
+      const capTime = document.createElement('time');
+      capTitle.textContent = 'do today ';
+      capTime.textContent = new reviseDate(new Date().valueOf()).intlFullDate;
+      section.append(sectionCap);
+      sectionCap.append(capTitleDiv);
+      capTitleDiv.append(capTitle);
+      capTitleDiv.append(capTime);
+      this.#projectNotify();
+      if(document.querySelector('.alert')){
+        const acceptBtn = document.querySelector('.alert button');
+        acceptBtn.addEventListener('click', (e) => {
+          this.pageContent;
+        });
+      };
       let count = 0;
       Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(key => {
         let countitem = 0;
           const part = document.createElement('div');
-          const titlePart = document.createElement('h2');
+          const titlePart = document.createElement('h3');
           titlePart.textContent = key;
           part.appendChild(titlePart);
           section.appendChild(part);
           JSON.parse(localStorage.getItem('todoList'))[key].forEach((item, index) => {
-            if(new reviseDate(+item.split('",,,"')[0]).equalDate){
+            if(new reviseDate(+item[0]).equalDate){
               section.appendChild(new controlArticles(item, key, this.pageLink).extractArticle);
               count++;
               countitem++;
@@ -111,15 +131,15 @@ export class printContent {
         const dataProject = JSON.parse(localStorage.getItem('todoList'))[this.projectName];
         mainTitle.textContent = this.projectName;
         dataProject.forEach((item, index) => {
-          const itemArr = item.split('",,,"');
-          if(!dataProject[index - 1] || !new reviseDate(+dataProject[index - 1].split('",,,"')[0],+itemArr[0]).equalDate){
+          const itemArr = item;
+          if(!dataProject[index - 1] || !new reviseDate(+dataProject[index - 1][0],+itemArr[0]).equalDate){
             const datePart = document.createElement('div');
             const dateTime = document.createElement('time');
             datePart.appendChild(dateTime);
             dateTime.textContent = new reviseDate(+itemArr[0]).equalDate ? `Today, ${new reviseDate(+itemArr[0]).intlFullDate}` : new reviseDate(+itemArr[0]).intlFullDate;
             section.appendChild(datePart);
             section.appendChild(new controlArticles(item, this.projectName, this.pageLink).extractArticle);
-          }else if(new reviseDate(+dataProject[index - 1].split('",,,"')[0],+itemArr[0]).equalDate){
+          }else if(new reviseDate(+dataProject[index - 1][0],+itemArr[0]).equalDate){
             section.appendChild(new controlArticles(item, this.projectName, this.pageLink).extractArticle);
           };
         });
@@ -196,6 +216,42 @@ export class printContent {
       };
     };
     return createNote;
+  }
+
+  #projectNotify(){
+    const projObj = JSON.parse(localStorage.getItem('projList'));
+    Object.keys(projObj).forEach(key => {
+      if(projObj[key][1] === 'normal' || projObj[key][1] === 'high'){
+        const timeNote = new Date(+projObj[key][0]).valueOf();
+        const difference = timeNote - new Date().valueOf();
+        const difCompare = projObj[key][1] === 'normal' ? 24*60*60*1000 : 3*24*60*60*1000;
+        if(0 < difference <= difCompare){
+          const section = document.querySelector('section');
+          const notifyBlock = document.createElement('div');
+          const notifySpan = document.createElement('span');
+          const notifyNote = document.createElement('p');
+          const notifyTime = document.createElement('time');
+          const notifyBtn = document.createElement('button');
+          notifyBlock.className = 'alert';
+          notifySpan.textContent = key;
+          notifyNote.textContent = ' time expires: ';
+          notifyTime.textContent = new reviseDate(new Date(+projObj[key][0]).valueOf()).intlFullDate;
+          notifyBtn.textContent = 'accept';
+          notifyBtn.type = 'button';
+          notifyBtn.dataset.projlink = key;
+          section.append(notifyBlock);
+          notifyBlock.append(notifyNote);
+          notifyNote.prepend(notifySpan);
+          notifyNote.append(notifyTime);
+          notifyBlock.append(notifyBtn);
+          notifyBtn.addEventListener('click', (e) => {
+            const targKey = e.target.dataset.projlink;
+            projObj[targKey][1] = projObj[targKey][1] === 'high' ? 'normal' : 'low';
+            localStorage.setItem('projList', JSON.stringify(projObj));
+          });
+        };
+      };
+    });
   }
 
 }
