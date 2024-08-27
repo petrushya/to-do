@@ -8,7 +8,7 @@ export class controlprojects{
     this.pageLink = pageLink;
   }
   get extractDiv(){
-    const projData = JSON.parse(localStorage.getItem('projList'))[this.storageKey].toString().split('",,,"');
+    const projData = JSON.parse(localStorage.getItem('projList'))[this.storageKey];
     const projectDiv = document.createElement('div');
     const projectCap = document.createElement('div');
     const projectStartCap = document.createElement('span');
@@ -57,7 +57,7 @@ export class controlprojects{
 
   get reviseButton(){
     if(this.pageLink === 'allprojects'){
-      const projData = JSON.parse(localStorage.getItem('projList'))[this.storageKey].toString().split('",,,"');
+      const projData = JSON.parse(localStorage.getItem('projList'))[this.storageKey];
       const projectRevise = document.createElement('button');
       projectRevise.className = 'reviseproj';
       projectRevise.dataset.projlink = this.storageKey;
@@ -89,4 +89,5 @@ export class controlprojects{
       return deleteProject;
     };
   }
+
 }

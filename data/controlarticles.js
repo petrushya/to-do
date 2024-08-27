@@ -8,9 +8,10 @@ export class controlArticles{
     storageKey ? this.storageKey = storageKey : this.storageKey = 'routine';
     pageLink ? this.pageLink = pageLink : this.pageLink = '';
   }
+
   get extractArticle(){
     const storageData = JSON.parse(localStorage.getItem('todoList'));
-    const arrayData = this.stringData.split('",,,"');
+    const arrayData = this.stringData;
     const article = document.createElement('article');
     const mainPart = document.createElement('div');
     const checkSpan = document.createElement('span');
@@ -27,7 +28,7 @@ export class controlArticles{
     checkSpan.className = 'status';
     checkSpan.addEventListener('click', () => {
       arrayData[1] === 'nonchecked' ? arrayData[1] = 'checked' : arrayData[1] = 'nonchecked';
-      new articlesData(this.storageKey, this.stringData, arrayData.join('",,,"')).changeArticleData;
+      new articlesData(this.storageKey, this.stringData, arrayData).changeArticleData;
     });
     checkSpan.classList.add(arrayData[1]);
     arrayData[1] === 'checked' ? checkSpan.innerHTML = '&#x2611;' : checkSpan.innerHTML = '&#x2610;';
@@ -37,6 +38,7 @@ export class controlArticles{
     timeHour.className = 'hourdate';
     timeHour.textContent = new reviseDate(+arrayData[0]).intlHour;
     timeHour.setAttribute('datetime', new reviseDate(+arrayData[0]).sortFullDate);
+      const timeArr = [];
     if(checkSpan.classList.contains('checked')){
       timeHour.classList.add('isready');
       contentPara.className = 'paraready';
@@ -44,11 +46,9 @@ export class controlArticles{
       timeHour.classList.add('expired');
     }else if(new reviseDate(+arrayData[0]).overdueTime && new reviseDate(+arrayData[0]).equalDate){
       timeHour.classList.add('towork');
-      Object.keys(storageData).forEach(item => {
-        const index = storageData[item].indexOf(this.stringData);
-        if(item === this.storageKey && storageData[item][index + 1] && new reviseDate(+storageData[item][index + 1].split('",,,"')[0]).equalDate && new reviseDate(+storageData[item][index + 1].split('",,,"')[0]).overdueTime){
-        timeHour.classList.add('expired');
-        };
+      const timeMatch = new articlesData().timeArticles;
+      timeMatch.forEach((time, index) => {
+        if(time === arrayData[0] && new reviseDate(+timeMatch[index+1]).overdueTime && new reviseDate(+timeMatch[index+1]).equalDate) timeHour.classList.add('expired');
       });
     };
 
