@@ -18,7 +18,6 @@ export class articlesData {
     ];
     articleArray = appArray.filter(item => item.length > 0);
   }else{
-//    console.log(dataArray[0]);
     articleArray = [
       dataArray[0].toString() !== '' ? dataArray[0].toString() : '',
       (dataArray[1] === 'high' || dataArray[1] === 'normal') && dataArray[0].toString().trim() !== '' ? dataArray[1] : 'low',
@@ -86,16 +85,5 @@ export class articlesData {
     stringData.splice(stringData.indexOf(this.dataArticle.join('``",,,"``')), 1);
     storageObject[this.projectName] = stringData.map(item => item.split('``",,,"``'));
     localStorage.setItem('todoList', JSON.stringify(storageObject));
-  }
-
-  get timeArticles(){
-    const timeArr = [];
-    Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(proj => {
-      JSON.parse(localStorage.getItem('todoList'))[proj].forEach(item => {
-        timeArr.push(item[0]);
-        timeArr.sort();
-      });
-    });
-    return timeArr;
   }
 }

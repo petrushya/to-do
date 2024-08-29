@@ -13,6 +13,10 @@ h1, h2, h3, h4, h5{
   font-style: oblique;
   margin: 0.25em 0;
 }
+h4{
+  padding: 1rem 0;
+  border-block-start: thin solid #3a0050;
+}
 header{
   display: flex;
   justify-content: space-between;
@@ -25,12 +29,34 @@ header{
 main{
   min-block-size: 75vb;
 }
-main, section, .card{
+main, section, .card, .projectart{
   display: flex;
   flex-direction: column;
 }
 main h1{
+  inline-size: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  border-block-end: thick double #3a0050;
   align-self: center;
+  position: sticky;
+  top: 0;
+  margin: 0;
+}
+.sticky{
+  position: sticky;
+  top: 0;
+  margin: 0;
+  background-color: #fff;
+  border-block-end: thick double #3a0050;
+  & + div{
+    border-block-start: none;
+  }
+  & time{
+    font-size: 1.25rem;
+    margin-block-start: 0.5rem;
+  }
 }
 button{
   font-size: 1.25rem;
@@ -105,42 +131,86 @@ section{
   & > div{
     padding: 0 5%;
     padding-block-start: 1rem;
-    margin-block-start: 0.5rem;
-    border-block-start: medium double #3a0050;
-    margin-block-end: 0.5rem;
+    border-block-start: thick double #3a0050;
     & > time{
       font-weight: bold;
       font-size: 1.25rem;
     }
   }
 }
-section div + .card{
-  border-block-start: medium double #3a0050;
-}
 section > div:first-child{
-  border-block-start: thick double #3a0050;
+  border-block-start: none;
 }
-.projblock{
+#sectioncap{
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+}
+.headpart{
+  border-block-end: medium double #3a0050;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap: 2rem;
+  & h2{
+    flex: 1;
+  }
+}
+.projblock{
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block-end: 0.5rem;
+  gap: 0.5rem;
+}
+.projectart{
+  flex: 1;
+  justify-content: center;
+  & p{
+    margin: 0;
+  }
+}
+.projectcap{
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  & + .wrapping{
+    border-block-start: thin dotted  #3a0050;
+  }
+}
+.wrapping{
+  display: flex;
+  justify-content: flex-start;
+  align-items: start;
+  font-size: 1.125rem;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  & span{
+    font-weight: bold;
+  }
+}
+.checkpas{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+}
+.projectinfo{
+  border-block-start: thin dotted #3a0050;
+  padding: 0.5rem 0;
+  text-align: center;
+  & p::first-line{
+    font-weight: bold;
+  }
 }
 .card{
   inline-size: 90%;
   align-self: center;
-  border-block-end: medium double #3a0050;
+  border: thin solid #3a0050;
+  margin-block-end: 0.25rem;
 }
-.mainArticle{
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  column-gap: 0.5rem;
-  font-size: 1.125rem;
-  background-color: #f7f7f7;
-  padding: 0 0.5rem;
-  border-inline-start: thin solid #3a0050;
-  border-inline-end: thin solid #3a0050;
-  & button{
+.revise, .deletarticle, .reviseproj, .research, .delproject{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -152,7 +222,15 @@ section > div:first-child{
     font-size: 2rem;
     padding: 0;
     margin: 0.25rem 0;
-  }
+}
+.mainArticle{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  column-gap: 0.5rem;
+  font-size: 1.125rem;
+  background-color: #f7f7f7;
+  padding: 0 0.5rem;
 }
 .status, .priority{
   font-size: 1.5rem;
@@ -181,8 +259,7 @@ section > div:first-child{
 }
 .addition{
   padding: 0.25rem 2.5%;
-  border-inline-start: thin solid #3a0050;
-  border-inline-end: thin solid #3a0050;
+  border-block-start: thin dotted #3a0050;
 }
 .hourdate{
   font-size: 1.25rem;
@@ -195,7 +272,7 @@ section > div:first-child{
     color: #fff;
   }
   &.towork{
-    outline: thick solid #00640075;
+    outline: thick solid #00640090;
   }
   &.expired{
     outline: thick solid #ffd700;
@@ -203,6 +280,7 @@ section > div:first-child{
     color: #fff;
   }
   &.towork.expired{
+    outline: thick solid #00640050;
     background-color: #ffffbb;
     color: inherit;
   }
@@ -222,4 +300,25 @@ label{
   display: flex;
   justify-content: center;
   column-gap: 1rem;
+}
+.alert{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  margin: 0 5%;
+  background-color: #3a0050;
+  & p{
+    font-size: 1.25rem;
+    color: #fff;
+    margin: 0;
+    & span, & time{
+      color: inherit;
+    }
+    & span{
+      font-size: 1.5rem;
+      font-weight: bold;
+      font-variant: small-caps;
+    }
+  }
 }

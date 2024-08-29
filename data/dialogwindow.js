@@ -58,8 +58,7 @@ export class createDialog{
       let reviseArr;
       if(this.btnId === 'dialogBtn' || this.btnId === 'revise') spanTime = document.querySelector('#startTime + span');
       if(this.btnId === 'revise'){
-        reviseArr = new articlesData().timeArticles;
-        reviseArr.splice(reviseArr.indexOf(new Date(startTime.value).valueOf().toString()), 1);
+        reviseArr = this.timeArticles.splice(this.timeArticles.indexOf(new Date(startTime.value).valueOf().toString()), 1);
       };
 
       summaryNote.addEventListener('input', () => {
@@ -69,7 +68,7 @@ export class createDialog{
       });
 
       if(this.btnId === 'dialogBtn') startTime.addEventListener('input', () => {
-        if(new articlesData().timeArticles.includes(new Date(startTime.value).valueOf().toString())){
+        if(this.timeArticles.includes(new Date(startTime.value).valueOf().toString())){
           spanTime.className = 'error';
           startTime.className = 'error';
           spanTime.textContent = 'This time is reserved!';
@@ -93,7 +92,7 @@ export class createDialog{
       });
 
       confirmBtn.addEventListener('click', (e) => {
-        if((this.btnId === 'dialogBtn' && new articlesData().timeArticles.includes(new Date(startTime.value).valueOf().toString())) || (this.btnId === 'revise' && reviseArr.includes(new Date(startTime.value).valueOf().toString()))){
+        if((this.btnId === 'dialogBtn' && this.timeArticles.includes(new Date(startTime.value).valueOf().toString())) || (this.btnId === 'revise' && reviseArr.includes(new Date(startTime.value).valueOf().toString()))){
           startTime.className = 'error';
           spanTime.className = 'error';
           spanTime.textContent = 'This time is reserved!';
@@ -123,6 +122,17 @@ export class createDialog{
       });
     };
     canselBtn.onclick = () => dialog.close();
+  }
+
+  get timeArticles(){
+    const timeArr = [];
+    Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(proj => {
+      JSON.parse(localStorage.getItem('todoList'))[proj].forEach(item => {
+        timeArr.push(item[0]);
+        timeArr.sort();
+      });
+    });
+    return timeArr;
   }
 
   #createDialogForm(){

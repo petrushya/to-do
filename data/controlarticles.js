@@ -46,7 +46,7 @@ export class controlArticles{
       timeHour.classList.add('expired');
     }else if(new reviseDate(+arrayData[0]).overdueTime && new reviseDate(+arrayData[0]).equalDate){
       timeHour.classList.add('towork');
-      const timeMatch = new articlesData().timeArticles;
+      const timeMatch = new createDialog().timeArticles;
       timeMatch.forEach((time, index) => {
         if(time === arrayData[0] && new reviseDate(+timeMatch[index+1]).overdueTime && new reviseDate(+timeMatch[index+1]).equalDate) timeHour.classList.add('expired');
       });
@@ -99,5 +99,4 @@ export class controlArticles{
 
     return article;
   }
-
 }
