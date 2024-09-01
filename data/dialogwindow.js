@@ -133,7 +133,6 @@ export class createDialog{
         timeArr.sort();
       });
     });
-    console.log(timeArr);
     return timeArr;
   }
 
