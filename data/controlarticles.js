@@ -39,7 +39,6 @@ export class controlArticles{
     timeHour.className = 'hourdate';
     timeHour.textContent = new reviseDate(+arrayData[0]).intlHour;
     timeHour.setAttribute('datetime', new reviseDate(+arrayData[0]).sortFullDate);
-      const timeArr = [];
     if(checkSpan.classList.contains('checked')){
       timeHour.classList.add('isready');
       contentPara.className = 'paraready';
@@ -47,7 +46,7 @@ export class controlArticles{
       timeHour.classList.add('expired');
     }else if(new reviseDate(+arrayData[0]).overdueTime && new reviseDate(+arrayData[0]).equalDate){
       timeHour.classList.add('towork');
-      const timeMatch = new createDialog().timeArticles;
+      const timeMatch = this.#nonCeckedArtcl();
       timeMatch.forEach((time, index) => {
         if(time === arrayData[0] && new reviseDate(+timeMatch[index+1]).overdueTime && new reviseDate(+timeMatch[index+1]).equalDate) timeHour.classList.add('expired');
       });
@@ -97,7 +96,19 @@ export class controlArticles{
       notePart.appendChild(notePara)
       article.appendChild(notePart);
     };
-
     return article;
+  }
+
+  #nonCeckedArtcl(){
+    const timeArr = [];
+    Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(proj => {
+      JSON.parse(localStorage.getItem('todoList'))[proj].forEach(item => {
+        if(item[1] === 'nonchecked'){
+          timeArr.push(item[0]);
+          timeArr.sort();
+        };
+      });
+    });
+    return timeArr;
   }
 }
