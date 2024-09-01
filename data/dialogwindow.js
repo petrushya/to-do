@@ -55,10 +55,10 @@ export class createDialog{
       const spanNote = document.querySelector('#spanNote');
       const startTime = document.querySelector('#startTime');
       let spanTime;
-      let reviseArr;
+      let reviseTime;
       if(this.btnId === 'dialogBtn' || this.btnId === 'revise') spanTime = document.querySelector('#startTime + span');
       if(this.btnId === 'revise'){
-        reviseArr = this.timeArticles.splice(this.timeArticles.indexOf(new Date(startTime.value).valueOf().toString()), 1);
+        reviseTime = this.timeArticles.splice(this.timeArticles.indexOf(new Date(startTime.value).valueOf().toString()), 1)[0];
       };
 
       summaryNote.addEventListener('input', () => {
@@ -80,7 +80,8 @@ export class createDialog{
       });
 
       if(this.btnId === 'revise') startTime.addEventListener('input', () => {
-        if(reviseArr.includes(new Date(startTime.value).valueOf().toString())){
+        console.log(reviseTime, new Date(startTime.value).valueOf().toString());
+        if(reviseTime !== new Date(startTime.value).valueOf().toString() && this.timeArticles.includes(new Date(startTime.value).valueOf().toString())){
           spanTime.className = 'error';
           startTime.className = 'error';
           spanTime.textContent = 'This time is reserved!';
@@ -92,7 +93,7 @@ export class createDialog{
       });
 
       confirmBtn.addEventListener('click', (e) => {
-        if((this.btnId === 'dialogBtn' && this.timeArticles.includes(new Date(startTime.value).valueOf().toString())) || (this.btnId === 'revise' && reviseArr.includes(new Date(startTime.value).valueOf().toString()))){
+        if((this.btnId === 'dialogBtn' && this.timeArticles.includes(new Date(startTime.value).valueOf().toString())) || (this.btnId === 'revise' && reviseTime !== new Date(startTime.value).valueOf().toString() && this.timeArticles.includes(new Date(startTime.value).valueOf().toString()))){
           startTime.className = 'error';
           spanTime.className = 'error';
           spanTime.textContent = 'This time is reserved!';
@@ -132,6 +133,7 @@ export class createDialog{
         timeArr.sort();
       });
     });
+    console.log(timeArr);
     return timeArr;
   }
 
