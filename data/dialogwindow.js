@@ -35,17 +35,17 @@ export class createDialog{
           nameProject.focus();
         }else{
           e.preventDefault();
-          const startProjTime = new Date(document.querySelector('#startTime').value).valid ? new Date(document.querySelector('#startTime').value).valueOf() : '';
+          const startProjTime = new Date(document.querySelector('#startTime').value).valid ? new Date(document.querySelector('#startTime').value).valueOf().toString() : '';
           const priority = document.querySelector('#priority').value;
           const detailNote = document.querySelector('#detailNote').value ? document.querySelector('#detailNote').value : '';
           if(this.btnId === 'reviseproj'){
             const inputString = [startProjTime, priority, detailNote];
             new articlesData(nameProject.value, inputString).changeProjData;
-            new printContent('allprojects', nameProject.value).pageContent;
+            new printContent('allprojects').pageContent;
           }else if(this.btnId === 'createproject'){
             const inputString = [startProjTime, priority, detailNote];
             new articlesData(nameProject.value, inputString).addArticleData;
-            new printContent('', nameProject.value).pageContent;
+            new printContent(nameProject.value).pageContent;
           };
           dialog.close();
         };
@@ -104,7 +104,7 @@ export class createDialog{
           summaryNote.focus();
         }else{
           e.preventDefault();
-          const startAddTime = new Date(startTime.value).valueOf();
+          const startAddTime = new Date(startTime.value).valueOf().toString();
           const status = '';
           const priority = document.querySelector('#priority').value;
           const nameProject = document.querySelector('#nameProject').value;
@@ -116,7 +116,7 @@ export class createDialog{
             const inputString = [startAddTime, status, priority, summaryNote.value, detailNote];
             new articlesData(nameProject, inputString).addArticleData;
           };
-          new printContent('', nameProject).pageContent;
+          new printContent(nameProject).pageContent;
           dialog.close();
         };
       });
@@ -170,7 +170,7 @@ export class createDialog{
       startTime.value = new reviseDate(new Date()).sortFullDate;
     };
     startTimeLabel.setAttribute('for', 'startTime');
-    startTimeLabel.textContent = this.btnId.includes('proj') ? 'Deadline: ' : 'Start Time: ';
+    startTimeLabel.textContent = this.btnId.includes('proj') ? 'Deadline (skip the field if not): ' : 'Start Time: ';
     priority.name = 'priority';
     priority.id = 'priority';
     priorityLabel.setAttribute('for', 'priority');
@@ -182,18 +182,18 @@ export class createDialog{
     fieldset.appendChild(legendForm);
     fieldset.appendChild(nameProjectLabel);
     if(this.btnId === 'reviseproj'){
-        nameProject.setAttribute('disabled', '');
-        nameProject.value = this.nameProj;
-        nameProjectLabel.appendChild(nameProject);
-      }else if(this.btnId === 'createproject'){
-        nameProject.setAttribute('maxlength', '15');
-        nameProject.required = 'required';
-        nameProjectLabel.textContent = 'Project Name (required): ';
-        const spanName = document.createElement('span');
-        spanName.id = 'spanName';
-        spanName.textContent = '';
-        fieldset.appendChild(nameProject)
-        fieldset.appendChild(spanName);
+      nameProject.setAttribute('disabled', '');
+      nameProject.value = this.nameProj;
+      nameProjectLabel.appendChild(nameProject);
+    }else if(this.btnId === 'createproject'){
+      nameProject.setAttribute('maxlength', '15');
+      nameProject.required = 'required';
+      nameProjectLabel.textContent = 'Project Name (required): ';
+      const spanName = document.createElement('span');
+      spanName.id = 'spanName';
+      spanName.textContent = '';
+      fieldset.appendChild(nameProject)
+      fieldset.appendChild(spanName);
     }else if(this.btnId === 'dialogBtn' && this.nameProj === ''){
       Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(key => {
         const nameProjectOption = document.createElement('option');
