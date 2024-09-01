@@ -4,43 +4,74 @@ import { createDialog } from './dialogwindow.js';
 import { controlprojects } from './controlprojects.js';
 
 export class printContent {
-  constructor(pageLink, projectName){
-    this.projectName = projectName;
+  constructor(pageLink){
     this.pageLink = pageLink;
   }
 
   get pageContent(){
-    this.#expandMenu();
     const mainTitle = document.querySelector('main h1');
     mainTitle.textContent = 'daily to-do list';
+    const navExpand = document.querySelector('#navexpand');
+    navExpand.textContent = '';
+    if(Object.keys(JSON.parse(localStorage.getItem('projList'))).length > 0) this.#expandMenu();
     if(document.querySelector('#dialogBtn')) document.querySelector('#dialogBtn').remove();
     const section = document.querySelector('section');
     section.textContent = '';
-    if(Object.keys(JSON.parse(localStorage.getItem('todoList'))).length <= 0){
-      mainTitle.textContent = 'no to-do lists';
-      section.textContent = '';
-    }else if(this.pageLink === 'today'){
-      document.querySelector('.pagehead').appendChild(this.#noteBtn());
-      const sectionCap = document.createElement('div');
-      sectionCap.className = 'sticky';
-      const capTitleDiv = document.createElement('div');
-      capTitleDiv.id = 'sectioncap';
-      const capTitle = document.createElement('h2');
-      const capTime = document.createElement('time');
-      const leftarrow = document.createElement('button');
-      const rightarrow = document.createElement('button');
-      leftarrow.id = 'leftarrow';
-      rightarrow.id = 'rightarrow';
-      capTitle.textContent = 'do today ';
-      capTime.textContent = new reviseDate(new Date().valueOf()).intlFullDate;
-      capTime.dataset.time = new Date().valueOf();
-      section.appendChild(sectionCap);
-      sectionCap.appendChild(capTitleDiv);
-      capTitleDiv.appendChild(leftarrow);
-      capTitleDiv.append(capTitle, capTime);
-      capTitleDiv.appendChild(rightarrow);
-      this.#projectNotify();
-      this.daysMap;
+    if(Object.keys(JSON.parse(localStorage.getItem('projList'))).length === 0){
+      const infoDiv = document.createElement('div');
+      const infoText = document.createElement('h3');
+      const btnElement = document.createElement('button');
+      infoDiv.className = 'projblock';
+      mainTitle.textContent = 'no topics on to-do list';
+      infoText.textContent = 'It\'s time to create a to-do list project';
+      btnElement.textContent = 'new project';
+      btnElement.id = 'createproject';
+      btnElement.setAttribute('type','button');
+      btnElement.onclick = () => {
+        btnElement.blur();
+        new createDialog(btnElement.id).showDialog;
+      };
+      section.appendChild(infoDiv);
+      infoDiv.appendChild(infoText);
+      infoDiv.appendChild(btnElement);
+    }else if(!isNaN(this.pageLink)){
+      if(new createDialog().timeArticles.length === 0){
+        const infoDiv = document.createElement('div');
+        const infoText = document.createElement('h3');
+        const btnElement = document.createElement('button');
+        infoDiv.className = 'projblock';
+        mainTitle.textContent = 'no to-do lists';
+        infoText.textContent = 'create a task for the project';
+        section.appendChild(infoDiv);
+        infoDiv.appendChild(infoText);
+        infoDiv.appendChild(this.#noteBtn());
+      }else{
+        document.querySelector('.pagehead').appendChild(this.#noteBtn());
+        const sectionCap = document.createElement('div');
+        sectionCap.className = 'sticky';
+        const capTitleDiv = document.createElement('div');
+        capTitleDiv.id = 'sectioncap';
+        const capTitle = document.createElement('h2');
+        const capTime = document.createElement('time');
+        const leftarrow = document.createElement('button');
+        const rightarrow = document.createElement('button');
+        leftarrow.id = 'leftarrow';
+        leftarrow.innerHTML = '&#x25c1;';
+        leftarrow.type = 'button';
+        leftarrow.name = 'previously';
+        rightarrow.id = 'rightarrow';
+        rightarrow.innerHTML = '&#x25b7;';
+        rightarrow.type = 'button';
+        rightarrow.name = 'next day';
+        section.appendChild(sectionCap);
+        sectionCap.appendChild(capTitleDiv);
+        capTitleDiv.appendChild(leftarrow);
+        capTitleDiv.appendChild(capTitle);
+        capTitleDiv.appendChild(capTime);
+        capTitleDiv.appendChild(rightarrow);
+        this.#projectNotify();
+        this.#daysMap();
+      };
     }else if(this.pageLink === 'allprojects'){
       mainTitle.textContent = 'projects list';
       Object.keys(JSON.parse(localStorage.getItem('projList'))).forEach(key => {
@@ -64,7 +95,7 @@ export class printContent {
         eye.innerHTML = '&#x1f441;';
         eye.className = 'research';
         eye.onclick = () => {
-          new printContent('',key).pageContent;
+          new printContent(key).pageContent;
         };
         eye.setAttribute('tabindex', 0);
         headpart.appendChild(eye);
@@ -87,21 +118,21 @@ export class printContent {
           para.textContent = `${key} list is empty`;
         };
       });
-    }else if(!Object.keys(JSON.parse(localStorage.getItem('todoList'))).includes(this.projectName)){
-      mainTitle.textContent = `${this.projectName} deleted`;
-    }else if(JSON.parse(localStorage.getItem('todoList'))[this.projectName]){
+    }else if(!Object.keys(JSON.parse(localStorage.getItem('todoList'))).includes(this.pageLink)){
+      mainTitle.textContent = `${this.pageLink} deleted`;
+    }else if(JSON.parse(localStorage.getItem('todoList'))[this.pageLink]){
       const projBtnBlock = document.createElement('div');
       const projectTitle = document.createElement('h2');
       projectTitle.textContent = 'to do list';
       projBtnBlock.classList = 'projblock';
       projBtnBlock.appendChild(this.#noteBtn());
-      projBtnBlock.appendChild(new controlprojects(this.projectName).extractDiv);
+      projBtnBlock.appendChild(new controlprojects(this.pageLink).extractDiv);
       section.prepend(projBtnBlock);
-      if(JSON.parse(localStorage.getItem('todoList'))[this.projectName].length === 0){
-        mainTitle.textContent = `${this.projectName} list is empty`;
+      if(JSON.parse(localStorage.getItem('todoList'))[this.pageLink].length === 0){
+        mainTitle.textContent = `${this.pageLink} list is empty`;
       }else{
-        const dataProject = JSON.parse(localStorage.getItem('todoList'))[this.projectName];
-        mainTitle.textContent = this.projectName;
+        const dataProject = JSON.parse(localStorage.getItem('todoList'))[this.pageLink];
+        mainTitle.textContent = this.pageLink;
         dataProject.forEach((item, index) => {
           const itemArr = item;
           if(!dataProject[index - 1] || !new reviseDate(+dataProject[index - 1][0],+itemArr[0]).equalDate){
@@ -110,9 +141,9 @@ export class printContent {
             datePart.appendChild(dateTime);
             dateTime.textContent = new reviseDate(+itemArr[0]).equalDate ? `Today, ${new reviseDate(+itemArr[0]).intlFullDate}` : new reviseDate(+itemArr[0]).intlFullDate;
             section.appendChild(datePart);
-            section.appendChild(new controlArticles(item, this.projectName, this.pageLink).extractArticle);
+            section.appendChild(new controlArticles(item, this.pageLink).extractArticle);
           }else if(new reviseDate(+dataProject[index - 1][0],+itemArr[0]).equalDate){
-            section.appendChild(new controlArticles(item, this.projectName, this.pageLink).extractArticle);
+            section.appendChild(new controlArticles(item, this.pageLink).extractArticle);
           };
         });
       };
@@ -131,98 +162,115 @@ export class printContent {
     });
   }
 
-  get daysMap(){
-    const daysDate = [];
+  #daysMap(){
+    const digitDaysDate = [];
+    const capTime = document.querySelector('#sectioncap time');
     const leftarrow = document.querySelector('#leftarrow');
     const rightarrow = document.querySelector('#rightarrow');
     const timeArtcls = new createDialog().timeArticles;
-    const capTime = document.querySelector('#sectioncap time');
+    let actualDate = new Date(new reviseDate(this.pageLink).fullDate).getTime();
     timeArtcls.forEach((time,index) => {
-      if(time && !(index - 1)){
-        daysDate.push(time);
-      }else if(time && (index - 1) && !new reviseDate(+time, +timeArtcls[index - 1]).equalDate){
-        daysDate.push(time);
+      if(time && !timeArtcls[index - 1]){
+        digitDaysDate.push(new Date(new reviseDate(+time).fullDate).getTime());
+      }else if(time && timeArtcls[index - 1] && !new reviseDate(+time, +timeArtcls[index - 1]).equalDate){
+        digitDaysDate.push(new Date(new reviseDate(+time).fullDate).getTime());
       };
     });
-    let arrindex;
-    daysDate.forEach((time,index) => {
-      if(new reviseDate(+time).equalDate){
-        capTime.dataset.time = time;
-        arrindex = index;
-        this.#getarticle();
-      };
-    });
+    if(!digitDaysDate.includes(new Date(new reviseDate(Date()).fullDate).getTime())){
+      digitDaysDate.push(new Date(new reviseDate(Date()).fullDate).getTime());
+      digitDaysDate.sort();
+    };
     rightarrow.addEventListener('click', () => {
-      if(arrindex < daysDate.length - 1 ){
-        capTime.dataset.time = daysDate[arrindex + 1];
-        arrindex += 1;
-        this.#getarticle();
+      if(digitDaysDate[digitDaysDate.indexOf(actualDate) + 1]){
+        actualDate = (new Date(digitDaysDate[digitDaysDate.indexOf(actualDate) + 1])).getTime();
+        new printContent(actualDate).pageContent;
       };
     });
     leftarrow.addEventListener('click', () => {
-      if(arrindex-1 >= 0){
-        capTime.dataset.time = daysDate[arrindex - 1];
-        arrindex -= 1;
+      if(digitDaysDate[digitDaysDate.indexOf(actualDate) - 1]){
+        actualDate = (new Date(digitDaysDate[digitDaysDate.indexOf(actualDate) - 1])).getTime();
+        new printContent(actualDate).pageContent;
+      };
+    });
+    digitDaysDate.forEach((time,index) => {
+      if(new reviseDate(time, actualDate).equalDate){
+        capTime.textContent = new reviseDate(new Date(actualDate).getTime()).intlFullDate;
+        capTime.dataset.actltime = actualDate;
+        rightarrow.style.visibility = !digitDaysDate[index + 1] ? 'hidden' : 'visible';
+        leftarrow.style.visibility = !digitDaysDate[index - 1] ? 'hidden' : 'visible';
+        this.#getarticle();
+      }else if(!digitDaysDate.includes(new Date(new reviseDate(actualDate).fullDate).getTime())){
+        const juryArt = digitDaysDate;
+        juryArt.push(new Date(new reviseDate(actualDate).fullDate).getTime());
+        juryArt.sort();
+        capTime.textContent = new reviseDate(new Date(actualDate).getTime()).intlFullDate;
+        capTime.dataset.actltime = actualDate;
+        rightarrow.style.visibility = !juryArt[juryArt.indexOf(actualDate) + 1] ? 'hidden' : 'visible';
+        leftarrow.style.visibility = !juryArt[juryArt.indexOf(actualDate) - 1] ? 'hidden' : 'visible';
         this.#getarticle();
       };
     });
   }
 
   #getarticle(){
-    const articleName = document.querySelector('.articlename');
     if(document.querySelectorAll('.articlename')){
       document.querySelectorAll('.articlename').forEach(item => {
        item.remove();
       });
     };
-    const section = document.querySelector('section');
     if(document.querySelectorAll('section article')){
       document.querySelectorAll('section article').forEach(item => {
        item.remove();
       });
     };
+    const section = document.querySelector('section');
     const capTime = document.querySelector('#sectioncap time');
-    const actualDate = capTime.dataset.time;
+    const actualDate = capTime.dataset.actltime;
+    const capTitle = document.querySelector('#sectioncap h2');
+    if(new reviseDate(+actualDate).equalDate){
+      capTitle.textContent = 'do today';
+    }else if(new reviseDate(+actualDate, new Date().getTime() + 24*60*60*1000).equalDate){
+      capTitle.textContent = 'do tomorrow';
+    }else if(new reviseDate(+actualDate, new Date().getTime() - 24*60*60*1000).equalDate){
+      capTitle.textContent = 'yesterday\'s list';
+    }else{
+      capTitle.textContent = 'do for the day';
+    };
     let count = 0;
     Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(key => {
       let countitem = 0;
-        const part = document.createElement('div');
-        part.className = 'articlename';
-        const titlePart = document.createElement('h3');
-        titlePart.textContent = key;
-        part.appendChild(titlePart);
-        section.appendChild(part);
-        JSON.parse(localStorage.getItem('todoList'))[key].forEach((item, index) => {
-          if(new reviseDate(+item[0],+actualDate).equalDate){
-            section.appendChild(new controlArticles(item, key, this.pageLink).extractArticle);
-            count++;
-            countitem++;
-          };
-        });
-      if(countitem === 0 && count !== 0){
+      const part = document.createElement('div');
+      part.className = 'articlename';
+      const titlePart = document.createElement('h3');
+      titlePart.textContent = key;
+      part.appendChild(titlePart);
+      section.appendChild(part);
+      JSON.parse(localStorage.getItem('todoList'))[key].forEach(item => {
+        if(new reviseDate(+item[0],+actualDate).equalDate){
+          section.appendChild(new controlArticles(item, key, this.pageLink).extractArticle);
+          count++;
+          countitem++;
+        };
+      });
+      if(countitem === 0){
         const info = document.createElement('h4');
         info.style = 'text-align: center';
         info.textContent = 'Nothing to do';
         part.appendChild(info);
       };
     });
-    if(count === 0){
-      capTitle.textContent = 'today\'s list is empty';
-      section.textContent = '';
-      section.appendChild(sectionCap);
-      sectionCap.appendChild(capTitleDiv);
-      this.#projectNotify();
-    };
   }
 
   #expandMenu(){
-    const olList = document.querySelector('#navexpand ol');
-    olList.textContent = '';
+    const navExpand = document.querySelector('#navexpand');
+    navExpand.textContent = '';
+    const olList = document.createElement('ol');
     const btnLi = document.createElement('li');
     const btnElement = document.createElement('button');
     btnElement.textContent = '+ new project';
     btnElement.id = 'createproject';
     btnElement.setAttribute('type','button');
+    navExpand.appendChild(olList);
     olList.appendChild(btnLi);
     btnLi.appendChild(btnElement);
     btnElement.onclick = () => {
@@ -240,8 +288,8 @@ export class printContent {
       btnProjElement.blur();
       new printContent(btnProjElement.id).pageContent;
     };
-    if(localStorage.getItem('todoList')){
-      Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(item => {
+    if(localStorage.getItem('projList')){
+      Object.keys(JSON.parse(localStorage.getItem('projList'))).forEach(item => {
         const menuLi = document.createElement('li');
         const menuElement = document.createElement('button');
         menuElement.className = 'contentbtn';
@@ -252,7 +300,7 @@ export class printContent {
         menuLi.appendChild(menuElement);
         menuElement.onclick = () => {
           menuElement.blur();
-          new printContent('', menuElement.dataset.link).pageContent;
+          new printContent(menuElement.dataset.link).pageContent;
         };
       });
     };
@@ -265,10 +313,10 @@ export class printContent {
     createNote.name = 'dialogButton';
     createNote.textContent = 'add note';
     createNote.onclick = () => {
-      if(this.pageLink === 'today'){
+      if(!isNaN(this.pageLink)){
         new createDialog(createNote.id).showDialog;
       }else{
-        new createDialog(createNote.id,'',this.projectName).showDialog;
+        new createDialog(createNote.id,'',this.pageLink).showDialog;
       };
     };
     return createNote;
@@ -310,7 +358,7 @@ export class printContent {
           const projKey = e.target.dataset.projlink;
           projObj[projKey][1] = projObj[projKey][1] === 'high' ? 'normal' : 'low';
           localStorage.setItem('projList', JSON.stringify(projObj));
-          this.pageContent;
+          document.querySelector('.alert').remove();
         });
       });
     };
