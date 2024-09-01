@@ -59,10 +59,12 @@ export class printContent {
         leftarrow.innerHTML = '&#x25c1;';
         leftarrow.type = 'button';
         leftarrow.name = 'previously';
+        leftarrow.setAttribute('tabindex', 0);
         rightarrow.id = 'rightarrow';
         rightarrow.innerHTML = '&#x25b7;';
         rightarrow.type = 'button';
         rightarrow.name = 'next day';
+        rightarrow.setAttribute('tabindex', 0);
         section.appendChild(sectionCap);
         sectionCap.appendChild(capTitleDiv);
         capTitleDiv.appendChild(leftarrow);
@@ -234,7 +236,7 @@ export class printContent {
     }else if(new reviseDate(+actualDate, new Date().getTime() - 24*60*60*1000).equalDate){
       capTitle.textContent = 'yesterday\'s list';
     }else{
-      capTitle.textContent = 'do for the day';
+      capTitle.textContent = 'to-do this day';
     };
     let count = 0;
     Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(key => {
