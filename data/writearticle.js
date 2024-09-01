@@ -32,8 +32,7 @@ export class articlesData {
     const storProjObject = !localStorage.getItem('projList') ? Object() : JSON.parse(localStorage.getItem('projList'));
     if(!storProjObject[this.projectName]){
       storageObject[this.projectName] = [];
-      // to record examples
-      storProjObject[this.projectName] = this.dataArticle.length > 3 ? ['','low',''] : this.#articleArray();
+      storProjObject[this.projectName] = this.dataArticle.length > 3 ? ['','low',''] : this.#articleArray(); // to record examples
       const sortkey = [];
       const sortObj = Object();
       Object.keys(storProjObject).forEach(key => {
