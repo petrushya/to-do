@@ -5,13 +5,14 @@ import { createDialog } from './dialogwindow.js';
 export class controlArticles{
   constructor(stringData, storageKey, pageLink){
     stringData ? this.stringData = stringData : this.stringData = '';
-    storageKey ? this.storageKey = storageKey : this.storageKey = 'routine';
+    this.storageKey = storageKey.trim();
     pageLink ? this.pageLink = pageLink : this.pageLink = '';
   }
 
   get extractArticle(){
     const storageData = JSON.parse(localStorage.getItem('todoList'));
-    const arrayData = this.stringData;
+    const arrayData = [];
+    this.stringData.forEach(item => arrayData.push(item));
     const article = document.createElement('article');
     const mainPart = document.createElement('div');
     const checkSpan = document.createElement('span');
@@ -74,7 +75,7 @@ export class controlArticles{
     mainPart.appendChild(contentPara);
     mainPart.appendChild(timeHour);
     mainPart.appendChild(prioritySpan);
-    if(this.pageLink !== 'today'){
+    if(!this.pageLink){
       const reviseButton = document.createElement('button');
       reviseButton.className = 'revise'
       reviseButton.dataset.link = this.storageKey;
@@ -88,7 +89,7 @@ export class controlArticles{
     };
     mainPart.appendChild(deletButton);
 
-    if(this.pageLink !== 'today' && arrayData.length > 4){
+    if(!this.pageLink && arrayData.length > 4){
       const notePart = document.createElement('div');
       const notePara = document.createElement('p');
       notePart.className = 'addition';
