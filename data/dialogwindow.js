@@ -21,7 +21,10 @@ export class createDialog{
         const spanName = document.querySelector('#spanName');
 
         nameProject.addEventListener('input', () => {
-          if(nameProject.classList.contains('error')) nameProject.classList.remove('error');
+          if(spanName.classList.contains('error')) spanName.classList.remove('error');
+          spanName.textContent = '';
+        });
+        nameProject.addEventListener('blur', () => {
           if(spanName.classList.contains('error')) spanName.classList.remove('error');
           spanName.textContent = '';
         });
@@ -29,7 +32,6 @@ export class createDialog{
 
       confirmBtn.addEventListener('click', (e) => {
         if(!nameProject.validity.valid && this.btnId === 'createproject'){
-          nameProject.className = 'error';
           spanName.className = 'error';
           spanName.textContent = 'Project name required!';
           nameProject.focus();
@@ -62,7 +64,10 @@ export class createDialog{
       };
 
       summaryNote.addEventListener('input', () => {
-        if(summaryNote.classList.contains('error')) summaryNote.classList.remove('error');
+        if(spanNote.classList.contains('error')) spanNote.classList.remove('error');
+        spanNote.textContent = '';
+      });
+      summaryNote.addEventListener('blur', () => {
         if(spanNote.classList.contains('error')) spanNote.classList.remove('error');
         spanNote.textContent = '';
       });
@@ -70,26 +75,29 @@ export class createDialog{
       if(this.btnId === 'dialogBtn') startTime.addEventListener('input', () => {
         if(this.timeArticles.includes(new Date(startTime.value).valueOf().toString())){
           spanTime.className = 'error';
-          startTime.className = 'error';
           spanTime.textContent = 'This time is reserved!';
         }else{
-          startTime.classList.remove('error');
           spanTime.classList.remove('error');
           spanTime.textContent = '';
         };
+        startTime.addEventListener('blur', () => {
+          if(spanTime.classList.contains('error')) spanTime.classList.remove('error');
+          spanTime.textContent = '';
+        });
       });
 
       if(this.btnId === 'revise') startTime.addEventListener('input', () => {
-        console.log(reviseTime, new Date(startTime.value).valueOf().toString());
         if(reviseTime !== new Date(startTime.value).valueOf().toString() && this.timeArticles.includes(new Date(startTime.value).valueOf().toString())){
           spanTime.className = 'error';
-          startTime.className = 'error';
           spanTime.textContent = 'This time is reserved!';
         }else{
-          startTime.classList.remove('error');
           spanTime.classList.remove('error');
           spanTime.textContent = '';
         };
+        startTime.addEventListener('blur', () => {
+          if(spanTime.classList.contains('error')) spanTime.classList.remove('error');
+          spanTime.textContent = '';
+        });
       });
 
       confirmBtn.addEventListener('click', (e) => {
