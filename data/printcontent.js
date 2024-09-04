@@ -22,9 +22,9 @@ export class printContent {
       const infoText = document.createElement('h3');
       const btnElement = document.createElement('button');
       infoDiv.className = 'projblock';
-      mainTitle.textContent = 'no topics on to-do list';
-      infoText.textContent = 'It\'s time to create a to-do list project';
-      btnElement.textContent = 'new project';
+      mainTitle.textContent = 'no topics for to-do lists';
+      infoText.textContent = 'It\'s time to create a to-do list topic';
+      btnElement.textContent = 'new topic';
       btnElement.id = 'createproject';
       btnElement.setAttribute('type','button');
       btnElement.onclick = () => {
@@ -41,7 +41,8 @@ export class printContent {
         const btnElement = document.createElement('button');
         infoDiv.className = 'projblock';
         mainTitle.textContent = 'no to-do lists';
-        infoText.textContent = 'create a task for the project';
+        infoText.textContent = 'create a list on a specific topic';
+        this.#projectNotify();
         section.appendChild(infoDiv);
         infoDiv.appendChild(infoText);
         infoDiv.appendChild(this.#noteBtn());
@@ -75,7 +76,7 @@ export class printContent {
         this.#daysMap();
       };
     }else if(this.pageLink === 'allprojects'){
-      mainTitle.textContent = 'projects list';
+      mainTitle.textContent = 'topics list';
       Object.keys(JSON.parse(localStorage.getItem('projList'))).forEach(key => {
         const part = document.createElement('div');
         const headpart = document.createElement('div');
@@ -178,10 +179,6 @@ export class printContent {
         digitDaysDate.push(new Date(new reviseDate(+time).fullDate).getTime());
       };
     });
-    if(!digitDaysDate.includes(new Date(new reviseDate(Date()).fullDate).getTime())){
-      digitDaysDate.push(new Date(new reviseDate(Date()).fullDate).getTime());
-      digitDaysDate.sort();
-    };
     rightarrow.addEventListener('click', () => {
       if(digitDaysDate[digitDaysDate.indexOf(actualDate) + 1]){
         actualDate = (new Date(digitDaysDate[digitDaysDate.indexOf(actualDate) + 1])).getTime();
@@ -254,13 +251,18 @@ export class printContent {
           countitem++;
         };
       });
-      if(countitem === 0){
-        const info = document.createElement('h4');
-        info.style = 'text-align: center';
-        info.textContent = 'Nothing to do';
-        part.appendChild(info);
-      };
+      if(countitem === 0) part.remove();
     });
+    if(count === 0){
+      if(document.querySelector('.projblock')) document.querySelector('.projblock').remove();
+      const addPart = document.createElement('div');
+      addPart.classList = 'projblock';
+      const addPartTitle = document.createElement('p');
+      addPartTitle.classList = 'parttxt';
+      addPartTitle.textContent = 'no to-do for this day';
+      section.appendChild(addPart);
+      addPart.appendChild(addPartTitle);
+    };
   }
 
   #expandMenu(){
@@ -269,7 +271,7 @@ export class printContent {
     const olList = document.createElement('ol');
     const btnLi = document.createElement('li');
     const btnElement = document.createElement('button');
-    btnElement.textContent = '+ new project';
+    btnElement.textContent = '+ new topic';
     btnElement.id = 'createproject';
     btnElement.setAttribute('type','button');
     navExpand.appendChild(olList);
@@ -281,7 +283,7 @@ export class printContent {
     };
     const btnProjLi = document.createElement('li');
     const btnProjElement = document.createElement('button');
-    btnProjElement.textContent = 'Projects List';
+    btnProjElement.textContent = 'Topics List';
     btnProjElement.id = 'allprojects';
     btnProjElement.setAttribute('type','button');
     olList.appendChild(btnProjLi);
@@ -313,7 +315,7 @@ export class printContent {
     createNote.id ='dialogBtn';
     createNote.type = 'button';
     createNote.name = 'dialogButton';
-    createNote.textContent = 'add note';
+    createNote.textContent = 'new entry';
     createNote.onclick = () => {
       if(!isNaN(this.pageLink)){
         new createDialog(createNote.id).showDialog;
