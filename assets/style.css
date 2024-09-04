@@ -163,6 +163,12 @@ section > div:first-child{
   align-items: center;
   padding-block-end: 0.5rem;
   gap: 0.5rem;
+  & .parttxt{
+    font-size: 1.75rem;
+    font-weight: bold;
+    font-variant: small-caps;
+    margin: 0.25rem auto;
+  }
 }
 .projectart{
   flex: 1;

@@ -33,7 +33,7 @@ export class createDialog{
       confirmBtn.addEventListener('click', (e) => {
         if(!nameProject.validity.valid && this.btnId === 'createproject'){
           spanName.className = 'error';
-          spanName.textContent = 'Project name required!';
+          spanName.textContent = 'Topic name required!';
           nameProject.focus();
         }else{
           e.preventDefault();
@@ -163,9 +163,9 @@ export class createDialog{
     noteForm.className = 'noteform';
     legendForm.textContent = 'new entry';
     nameProject.id = 'nameProject';
-    nameProject.name = 'project name';
+    nameProject.name = 'topic name';
     nameProjectLabel.setAttribute('for', 'nameProject');
-    nameProjectLabel.textContent = 'Project Name: ';
+    nameProjectLabel.textContent = 'Topic Name: ';
     startTime.id = 'startTime';
     startTime.type = this.btnId.includes('proj') ? 'date' : 'datetime-local';
     startTime.name = 'startTime';
@@ -197,7 +197,7 @@ export class createDialog{
     }else if(this.btnId === 'createproject'){
       nameProject.setAttribute('maxlength', '15');
       nameProject.required = 'required';
-      nameProjectLabel.textContent = 'Project Name (required): ';
+      nameProjectLabel.textContent = 'Topic Name (required): ';
       const spanName = document.createElement('span');
       spanName.id = 'spanName';
       spanName.textContent = '';
@@ -231,7 +231,7 @@ export class createDialog{
       const highOption = document.createElement('option');
       const lowOption = document.createElement('option');
 
-      priorityLabel.textContent = 'Task Priority: ';
+      priorityLabel.textContent = 'Job priority: ';
       normalOption.value = 'normal';
       normalOption.textContent = 'normal';
       if(this.array[2] === 'normal') normalOption.setAttribute('selected', '');
@@ -248,7 +248,7 @@ export class createDialog{
       summaryNote.setAttribute('maxlength', '80');
       summaryNote.required = 'required';
       summaryNoteLabel.setAttribute('for', 'summaryNote');
-      summaryNoteLabel.textContent = 'Common Task (required): ';
+      summaryNoteLabel.textContent = 'General work description (required): ';
       if(this.array) summaryNote.value = this.array[3];
 
       fieldset.appendChild(priorityLabel);
@@ -298,7 +298,7 @@ export class createDialog{
     if(this.array && this.array[4] && !this.btnId.includes('proj')) detailNote.value = this.array[4];
     if(this.array && this.array[2] && this.btnId.includes('proj')) detailNote.value = this.array[2];
     detailNoteLabel.setAttribute('for', 'detailNote');
-    detailNoteLabel.textContent = this.btnId.includes('proj') ? 'Project description: ' : 'Task Details: ';
+    detailNoteLabel.textContent = this.btnId.includes('proj') ? 'Topic description: ' : 'Detailed description: ';
     confirmBtn.name ='confirm entry';
     confirmBtn.value = 'confirm';
     confirmBtn.textContent = 'confirm';

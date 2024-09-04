@@ -40,8 +40,8 @@ const imgIcon = new Image;
 imgIcon.src = icon;
 imgIcon.width = '28';
 imgIcon.height ='28';
-footerNode.appendChild(link);
-link.appendChild(p);
-p.appendChild(imgIcon);
+footerNode.appendChild(p);
+p.appendChild(link);
+link.appendChild(imgIcon);
 
 
