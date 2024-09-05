@@ -14,7 +14,7 @@ export class printContent {
     const navExpand = document.querySelector('#navexpand');
     navExpand.textContent = '';
     if(Object.keys(JSON.parse(localStorage.getItem('projList'))).length > 0) this.#expandMenu();
-    if(document.querySelector('#dialogBtn')) document.querySelector('#dialogBtn').remove();
+    if(document.querySelector('button[data-btnname="dialogBtn"]')) document.querySelector('button[data-btnname="dialogBtn"]').remove();
     const section = document.querySelector('section');
     section.textContent = '';
     if(Object.keys(JSON.parse(localStorage.getItem('projList'))).length === 0){
@@ -24,12 +24,14 @@ export class printContent {
       infoDiv.className = 'projblock';
       mainTitle.textContent = 'no topics for to-do lists';
       infoText.textContent = 'It\'s time to create a to-do list topic';
+      btnElement.className = 'dialogBtn';
+      btnElement.dataset.btnname = 'createproject';
+      btnElement.name = 'new topic';
+      btnElement.type = 'button';
       btnElement.textContent = 'new topic';
-      btnElement.id = 'createproject';
-      btnElement.setAttribute('type','button');
       btnElement.onclick = () => {
         btnElement.blur();
-        new createDialog(btnElement.id).showDialog;
+        new createDialog(btnElement.dataset.btnname).showDialog;
       };
       section.appendChild(infoDiv);
       infoDiv.appendChild(infoText);
@@ -84,23 +86,26 @@ export class printContent {
         const title = document.createElement('h2');
         title.textContent = key;
         const createNote = document.createElement('button');
-        createNote.className ='dialogBtn';
+        createNote.className = 'dialogBtn';
+        createNote.name = 'new entry';
         createNote.dataset.projlink = key;
+        createNote.dataset.btnname = 'dialogBtn';
         createNote.type = 'button';
-        createNote.name = 'dialogButton';
-        createNote.textContent = 'add note';
+        createNote.textContent = 'new entry';
         createNote.onclick = () => {
-          new createDialog(createNote.className,'',createNote.dataset.projlink).showDialog;
-        }
+          new createDialog(createNote.dataset.btnname,'',createNote.dataset.projlink).showDialog;
+        };
         headpart.appendChild(createNote);
         headpart.appendChild(title);
         const eye = document.createElement('button');
+        eye.className = 'articlebtn';
+        eye.name = 'research topic';
+        eye.type = 'button';
+        eye.setAttribute('tabindex', 0);
         eye.innerHTML = '&#x1f441;';
-        eye.className = 'research';
         eye.onclick = () => {
           new printContent(key).pageContent;
         };
-        eye.setAttribute('tabindex', 0);
         headpart.appendChild(eye);
         const reviseBtn = new controlprojects(key, 'allprojects').reviseButton;
         headpart.appendChild(reviseBtn);
@@ -151,7 +156,7 @@ export class printContent {
         });
       };
     };
-    const deletarticle = document.querySelectorAll('.deletarticle');
+    const deletarticle = document.querySelectorAll('button[name="delete article"]');
     deletarticle.forEach(item => {
       item.addEventListener('click', () => {
         this.pageContent;
@@ -271,40 +276,44 @@ export class printContent {
     const olList = document.createElement('ol');
     const btnLi = document.createElement('li');
     const btnElement = document.createElement('button');
+    btnElement.className = 'topmenu';
+    btnElement.dataset.btnname = 'createproject';
+    btnElement.name = 'new topic';
+    btnElement.type = 'button';
     btnElement.textContent = '+ new topic';
-    btnElement.id = 'createproject';
-    btnElement.setAttribute('type','button');
     navExpand.appendChild(olList);
     olList.appendChild(btnLi);
     btnLi.appendChild(btnElement);
     btnElement.onclick = () => {
       btnElement.blur();
-      new createDialog(btnElement.id).showDialog;
+      new createDialog(btnElement.dataset.btnname).showDialog;
     };
     const btnProjLi = document.createElement('li');
     const btnProjElement = document.createElement('button');
+    btnProjElement.className = 'topmenu';
+    btnProjElement.dataset.btnname = 'allprojects';
+    btnProjElement.name = 'topics list';
+    btnProjElement.type = 'button';
     btnProjElement.textContent = 'Topics List';
-    btnProjElement.id = 'allprojects';
-    btnProjElement.setAttribute('type','button');
     olList.appendChild(btnProjLi);
     btnProjLi.appendChild(btnProjElement);
     btnProjElement.onclick = () => {
       btnProjElement.blur();
-      new printContent(btnProjElement.id).pageContent;
+      new printContent(btnProjElement.dataset.btnname).pageContent;
     };
     if(localStorage.getItem('projList')){
       Object.keys(JSON.parse(localStorage.getItem('projList'))).forEach(item => {
         const menuLi = document.createElement('li');
         const menuElement = document.createElement('button');
-        menuElement.className = 'contentbtn';
-        menuElement.dataset.link = item;
+        menuElement.className = 'topmenu';
+        menuElement.name = item;
+        menuElement.type = 'button';
         menuElement.textContent = item;
-        menuElement.setAttribute('type','button');
         olList.appendChild(menuLi);
         menuLi.appendChild(menuElement);
-        menuElement.onclick = () => {
+        menuElement.onclick = (e) => {
           menuElement.blur();
-          new printContent(menuElement.dataset.link).pageContent;
+          new printContent(e.target.name).pageContent;
         };
       });
     };
@@ -312,15 +321,16 @@ export class printContent {
 
   #noteBtn(){
     const createNote = document.createElement('button');
-    createNote.id ='dialogBtn';
+    createNote.className ='dialogBtn';
+    createNote.name = 'new entry';
+    createNote.dataset.btnname = 'dialogBtn';
     createNote.type = 'button';
-    createNote.name = 'dialogButton';
     createNote.textContent = 'new entry';
     createNote.onclick = () => {
       if(!isNaN(this.pageLink)){
-        new createDialog(createNote.id).showDialog;
+        new createDialog(createNote.dataset.btnname).showDialog;
       }else{
-        new createDialog(createNote.id,'',this.pageLink).showDialog;
+        new createDialog(createNote.dataset.btnname,'',this.pageLink).showDialog;
       };
     };
     return createNote;
@@ -344,9 +354,11 @@ export class printContent {
           notifySpan.textContent = key;
           notifyNote.textContent = ' time expires: ';
           notifyTime.textContent = new reviseDate(new Date(+projObj[key][0]).valueOf()).intlFullDate;
-          notifyBtn.textContent = 'accept';
-          notifyBtn.type = 'button';
+          notifyBtn.className = 'dialogBtn';
           notifyBtn.dataset.projlink = key;
+          notifyBtn.name = 'accept notification';
+          notifyBtn.type = 'button';
+          notifyBtn.textContent = 'accept';
           section.appendChild(notifyBlock);
           notifyBlock.appendChild(notifyNote);
           notifyNote.prepend(notifySpan);

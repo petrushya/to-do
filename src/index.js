@@ -25,7 +25,7 @@ logo.height = '50';
 headerNode.appendChild(logo);
 new printContent(new Date().getTime()).pageContent;
 
-const todayBtn = document.querySelector('#todaylink');
+const todayBtn = document.querySelector('button[data-link="today"]');
 todayBtn.onclick = () => {
   todayBtn.blur();
   new printContent(new Date().getTime()).pageContent;

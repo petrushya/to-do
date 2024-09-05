@@ -3,8 +3,8 @@ import { articlesData } from './writearticle.js';
 import { printContent } from './printcontent.js';
 
 export class createDialog{
-  constructor(btnId, array, nameProj){
-    this.btnId = btnId ? btnId : '';
+  constructor(btnname, array, nameProj){
+    this.btnname = btnname ? btnname : '';
     this.array = array ? array : '';
     this.nameProj = nameProj ? nameProj : '';
   }
@@ -15,8 +15,8 @@ export class createDialog{
     dialog.showModal();
     const canselBtn = document.querySelector('.dialogclose');
     const confirmBtn = document.querySelector('#confirmbtn');
-    if(this.btnId.includes('proj')){
-      if(this.btnId === 'createproject'){
+    if(this.btnname.includes('proj')){
+      if(this.btnname === 'createproject'){
         const nameProject = document.querySelector('#nameProject');
         const spanName = document.querySelector('#spanName');
 
@@ -31,7 +31,7 @@ export class createDialog{
       };
 
       confirmBtn.addEventListener('click', (e) => {
-        if(!nameProject.validity.valid && this.btnId === 'createproject'){
+        if(!nameProject.validity.valid && this.btnname === 'createproject'){
           spanName.className = 'error';
           spanName.textContent = 'Topic name required!';
           nameProject.focus();
@@ -40,11 +40,11 @@ export class createDialog{
           const startProjTime = new Date(document.querySelector('#startTime').value).valid ? new Date(document.querySelector('#startTime').value).valueOf().toString() : '';
           const priority = document.querySelector('#priority').value;
           const detailNote = document.querySelector('#detailNote').value ? document.querySelector('#detailNote').value : '';
-          if(this.btnId === 'reviseproj'){
+          if(this.btnname === 'reviseproj'){
             const inputString = [startProjTime, priority, detailNote];
             new articlesData(nameProject.value, inputString).changeProjData;
             new printContent('allprojects').pageContent;
-          }else if(this.btnId === 'createproject'){
+          }else if(this.btnname === 'createproject'){
             const inputString = [startProjTime, priority, detailNote];
             new articlesData(nameProject.value, inputString).addArticleData;
             new printContent(nameProject.value).pageContent;
@@ -58,8 +58,8 @@ export class createDialog{
       const startTime = document.querySelector('#startTime');
       let spanTime;
       let reviseTime;
-      if(this.btnId === 'dialogBtn' || this.btnId === 'revise') spanTime = document.querySelector('#startTime + span');
-      if(this.btnId === 'revise'){
+      if(this.btnname === 'dialogBtn' || this.btnname === 'revise') spanTime = document.querySelector('#startTime + span');
+      if(this.btnname === 'revise'){
         reviseTime = this.timeArticles.splice(this.timeArticles.indexOf(new Date(startTime.value).valueOf().toString()), 1)[0];
       };
 
@@ -72,7 +72,7 @@ export class createDialog{
         spanNote.textContent = '';
       });
 
-      if(this.btnId === 'dialogBtn') startTime.addEventListener('input', () => {
+      if(this.btnname === 'dialogBtn') startTime.addEventListener('input', () => {
         if(this.timeArticles.includes(new Date(startTime.value).valueOf().toString())){
           spanTime.className = 'error';
           spanTime.textContent = 'This time is reserved!';
@@ -86,7 +86,7 @@ export class createDialog{
         });
       });
 
-      if(this.btnId === 'revise') startTime.addEventListener('input', () => {
+      if(this.btnname === 'revise') startTime.addEventListener('input', () => {
         if(reviseTime !== new Date(startTime.value).valueOf().toString() && this.timeArticles.includes(new Date(startTime.value).valueOf().toString())){
           spanTime.className = 'error';
           spanTime.textContent = 'This time is reserved!';
@@ -101,7 +101,7 @@ export class createDialog{
       });
 
       confirmBtn.addEventListener('click', (e) => {
-        if((this.btnId === 'dialogBtn' && this.timeArticles.includes(new Date(startTime.value).valueOf().toString())) || (this.btnId === 'revise' && reviseTime !== new Date(startTime.value).valueOf().toString() && this.timeArticles.includes(new Date(startTime.value).valueOf().toString()))){
+        if((this.btnname === 'dialogBtn' && this.timeArticles.includes(new Date(startTime.value).valueOf().toString())) || (this.btnname === 'revise' && reviseTime !== new Date(startTime.value).valueOf().toString() && this.timeArticles.includes(new Date(startTime.value).valueOf().toString()))){
           startTime.className = 'error';
           spanTime.className = 'error';
           spanTime.textContent = 'This time is reserved!';
@@ -118,10 +118,10 @@ export class createDialog{
           const priority = document.querySelector('#priority').value;
           const nameProject = document.querySelector('#nameProject').value;
           const detailNote = document.querySelector('#detailNote').value ? document.querySelector('#detailNote').value : '';
-          if(this.btnId === 'revise'){
+          if(this.btnname === 'revise'){
             const inputString = [startAddTime, this.array[1], priority, summaryNote.value, detailNote];
             new articlesData(nameProject, this.array, inputString).changeArticleData;
-          }else if(this.btnId === 'dialogBtn'){
+          }else if(this.btnname === 'dialogBtn'){
             const inputString = [startAddTime, status, priority, summaryNote.value, detailNote];
             new articlesData(nameProject, inputString).addArticleData;
           };
@@ -153,7 +153,7 @@ export class createDialog{
     const fieldset = document.createElement('fieldset');
     const legendForm = document.createElement('legend');
     const nameProjectLabel = document.createElement('label');
-    const nameProject = this.btnId === 'dialogBtn' && this.nameProj === '' ? document.createElement('select') : document.createElement('input');
+    const nameProject = this.btnname === 'dialogBtn' && this.nameProj === '' ? document.createElement('select') : document.createElement('input');
     const startTimeLabel = document.createElement('label');
     const startTime = document.createElement('input');
     const priorityLabel = document.createElement('label');
@@ -161,25 +161,29 @@ export class createDialog{
 
     divElem.id = 'addnote';
     noteForm.className = 'noteform';
-    legendForm.textContent = 'new entry';
+    legendForm.textContent = this.btnname.includes('proj') ? 'create a topic' : 'create an entry';
     nameProject.id = 'nameProject';
     nameProject.name = 'topic name';
     nameProjectLabel.setAttribute('for', 'nameProject');
     nameProjectLabel.textContent = 'Topic Name: ';
     startTime.id = 'startTime';
-    startTime.type = this.btnId.includes('proj') ? 'date' : 'datetime-local';
+    startTime.type = this.btnname.includes('proj') ? 'date' : 'datetime-local';
     startTime.name = 'startTime';
-    if(this.btnId === 'reviseproj' && new reviseDate(+this.array[0]).fullDate !== new reviseDate(0).fullDate){
+    if(this.btnname === 'reviseproj' && new reviseDate(+this.array[0]).fullDate !== new reviseDate(0).fullDate){
       startTime.value = new reviseDate(+this.array[0]).fullDate;
-    }else if(this.btnId === 'revise'){
+      legendForm.textContent = 'adjust the topic';
+    }else if(this.btnname === 'revise'){
       startTime.value = this.array[0] !== 'indefinit' ? new reviseDate(+this.array[0]).sortFullDate : '';
-    }else if(this.btnId === 'createproject'){
+      legendForm.textContent = 'correct the entry';
+    }else if(this.btnname === 'createproject'){
       startTime.value = '';
-    }else if(this.btnId === 'dialogBtn'){
+      legendForm.textContent = 'create a topic';
+    }else if(this.btnname === 'dialogBtn'){
       startTime.value = new reviseDate(new Date()).sortFullDate;
+      legendForm.textContent = 'create an entry';
     };
     startTimeLabel.setAttribute('for', 'startTime');
-    startTimeLabel.textContent = this.btnId.includes('proj') ? 'Deadline (skip the field if not): ' : 'Start Time: ';
+    startTimeLabel.textContent = this.btnname.includes('proj') ? 'Deadline (skip the field if not): ' : 'Start Time: ';
     priority.name = 'priority';
     priority.id = 'priority';
     priorityLabel.setAttribute('for', 'priority');
@@ -190,11 +194,11 @@ export class createDialog{
     noteForm.appendChild(fieldset);
     fieldset.appendChild(legendForm);
     fieldset.appendChild(nameProjectLabel);
-    if(this.btnId === 'reviseproj'){
+    if(this.btnname === 'reviseproj'){
       nameProject.setAttribute('disabled', '');
       nameProject.value = this.nameProj;
       nameProjectLabel.appendChild(nameProject);
-    }else if(this.btnId === 'createproject'){
+    }else if(this.btnname === 'createproject'){
       nameProject.setAttribute('maxlength', '15');
       nameProject.required = 'required';
       nameProjectLabel.textContent = 'Topic Name (required): ';
@@ -203,7 +207,7 @@ export class createDialog{
       spanName.textContent = '';
       fieldset.appendChild(nameProject)
       fieldset.appendChild(spanName);
-    }else if(this.btnId === 'dialogBtn' && this.nameProj === ''){
+    }else if(this.btnname === 'dialogBtn' && this.nameProj === ''){
       Object.keys(JSON.parse(localStorage.getItem('todoList'))).forEach(key => {
         const nameProjectOption = document.createElement('option');
         nameProjectOption.value = key;
@@ -211,7 +215,7 @@ export class createDialog{
         nameProjectLabel.appendChild(nameProject);
         nameProject.appendChild(nameProjectOption);
       });
-    }else if(this.btnId === 'revise' || (this.btnId === 'dialogBtn' && this.nameProj)){
+    }else if(this.btnname === 'revise' || (this.btnname === 'dialogBtn' && this.nameProj)){
       nameProject.value = this.nameProj;
       nameProject.setAttribute('disabled', '');
       nameProjectLabel.appendChild(nameProject);
@@ -219,7 +223,7 @@ export class createDialog{
 
     fieldset.appendChild(startTimeLabel);
     fieldset.appendChild(startTime);
-    if(!this.btnId.includes('proj')){
+    if(!this.btnname.includes('proj')){
       const spanTime = document.createElement('span');
       spanTime.textContent = '';
       fieldset.appendChild(spanTime);
@@ -261,7 +265,7 @@ export class createDialog{
       fieldset.appendChild(spanNote);
     }
 
-    if(this.btnId.includes('proj')){
+    if(this.btnname.includes('proj')){
       priorityLabel.textContent = 'Notice of expiration: ';
       const normalOption = document.createElement('option');
       const highOption = document.createElement('option');
@@ -293,12 +297,12 @@ export class createDialog{
     btnPara.className = 'btnwrap';
 
     detailNote.name = 'detail';
-    detailNote.rows = this.btnId.includes('proj') ? '3' : '5';
+    detailNote.rows = this.btnname.includes('proj') ? '3' : '5';
     detailNote.cols = '30';
-    if(this.array && this.array[4] && !this.btnId.includes('proj')) detailNote.value = this.array[4];
-    if(this.array && this.array[2] && this.btnId.includes('proj')) detailNote.value = this.array[2];
+    if(this.array && this.array[4] && !this.btnname.includes('proj')) detailNote.value = this.array[4];
+    if(this.array && this.array[2] && this.btnname.includes('proj')) detailNote.value = this.array[2];
     detailNoteLabel.setAttribute('for', 'detailNote');
-    detailNoteLabel.textContent = this.btnId.includes('proj') ? 'Topic description: ' : 'Detailed description: ';
+    detailNoteLabel.textContent = this.btnname.includes('proj') ? 'Topic description: ' : 'Details: ';
     confirmBtn.name ='confirm entry';
     confirmBtn.value = 'confirm';
     confirmBtn.textContent = 'confirm';

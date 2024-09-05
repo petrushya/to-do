@@ -63,8 +63,9 @@ export class controlArticles{
       prioritySpan.innerHTML = '&#x272d;&#x272d;';
     };
 
-    deletButton.className = 'deletarticle';
-    deletButton.setAttribute('type', 'button');
+    deletButton.className = 'articlebtn';
+    deletButton.name = 'delete article';
+    deletButton.type = 'button';
     deletButton.innerHTML = '&#x1F5D1;';
     deletButton.addEventListener('click', () => {
       new articlesData(this.storageKey, this.stringData).deletArticle;
@@ -76,13 +77,15 @@ export class controlArticles{
     mainPart.appendChild(prioritySpan);
     if(!this.pageLink){
       const reviseButton = document.createElement('button');
-      reviseButton.className = 'revise'
+      reviseButton.className = 'articlebtn';
+      reviseButton.name = 'revise article';
+      reviseButton.dataset.btnname = 'revise';
       reviseButton.dataset.link = this.storageKey;
-      reviseButton.setAttribute('type', 'button');
+      reviseButton.type = 'button';
       reviseButton.innerHTML = '&#x1f4cb;';
-      reviseButton.onclick = () => {
+      reviseButton.onclick = (e) => {
         reviseButton.blur();
-        new createDialog(reviseButton.className, arrayData, reviseButton.dataset.link).showDialog;
+        new createDialog(e.target.dataset.btnname, arrayData, e.target.dataset.link).showDialog;
       };
       mainPart.appendChild(reviseButton);
     };

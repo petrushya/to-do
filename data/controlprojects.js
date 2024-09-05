@@ -58,25 +58,28 @@ export class controlprojects{
   get reviseButton(){
     if(this.pageLink === 'allprojects'){
       const projData = JSON.parse(localStorage.getItem('projList'))[this.storageKey];
-      const projectRevise = document.createElement('button');
-      projectRevise.className = 'reviseproj';
-      projectRevise.dataset.projlink = this.storageKey;
-      projectRevise.setAttribute('type', 'button');
-      projectRevise.innerHTML = '&#x1f4cb;';
-      projectRevise.addEventListener('click', (e) => {
-        new createDialog(projectRevise.className, projData, e.target.dataset.projlink).showDialog;
+      const reviseProject = document.createElement('button');
+      reviseProject.className = 'articlebtn';
+      reviseProject.name = 'revise topic';
+      reviseProject.dataset.btnname = 'reviseproj';
+      reviseProject.dataset.projlink = this.storageKey;
+      reviseProject.type = 'button';
+      reviseProject.innerHTML = '&#x1f4cb;';
+      reviseProject.addEventListener('click', (e) => {
+        new createDialog(e.target.dataset.btnname, projData, e.target.dataset.projlink).showDialog;
       });
-    return projectRevise;
+    return reviseProject;
     };
   }
 
   get deletButton(){
     if(this.pageLink === 'allprojects'){
       const deleteProject = document.createElement('button');
-      deleteProject.className = 'delproject';
+      deleteProject.className = 'articlebtn';
+      deleteProject.name = 'delete topic';
+      deleteProject.dataset.btnname = 'delproject';
       deleteProject.dataset.projlink = this.storageKey;
       deleteProject.type = 'button';
-      deleteProject.name = 'delete project';
       deleteProject.innerHTML = '&#x1F5D1;';
       deleteProject.addEventListener('click', (e) => {
         const obj = JSON.parse(localStorage.getItem('todoList'));
