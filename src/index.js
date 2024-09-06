@@ -7,7 +7,7 @@ import { printContent } from '../data/printcontent.js';
 
 localStorage.clear();
 new articlesData('routine',[`${new Date(new reviseDate(Date()).sortFullDate).valueOf() - 30*60*1000}`,'','','daily job']).addArticleData;
-new articlesData('my lessons',[`${new Date(new reviseDate(Date()).sortFullDate).valueOf() + 24*60*60*1000}`,'normal','learn something from "javascrit"']).addArticleData;
+new articlesData('my lessons',[`${new Date(new reviseDate(Date()).sortFullDate).valueOf() + 24*60*60*1000}`,'normal','learn something from "javascript"']).addArticleData;
 new articlesData('my lessons',[`${new Date(new reviseDate(Date()).sortFullDate).valueOf() - 60*60*1000}`,'','','some one', 'lorem ipsum carent dolor:\n 1. something else']).addArticleData;
 new articlesData('my lessons',[`${new Date(new reviseDate(Date()).sortFullDate).valueOf() - 90*60*1000}`,'','','new some one', 'lorem ipsum carent dolor:\n 1. something else\n2. else something else']).addArticleData;
 new articlesData('my lessons',[`${new Date(new reviseDate(Date()).sortFullDate).valueOf() + 60*60*1000}`,'','high','else else some one']).addArticleData;
