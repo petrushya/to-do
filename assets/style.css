@@ -140,6 +140,9 @@ section{
 section > div:first-child{
   border-block-start: none;
 }
+.navlink{
+  text-decoration: none;
+}
 #sectioncap{
   display: flex;
   justify-content: space-between;
@@ -326,7 +329,7 @@ label{
   margin: 0 5%;
   background-color: #3a0050;
   & p{
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     color: #fff;
     margin: 0;
     & span, & time{
@@ -336,6 +339,7 @@ label{
       font-size: 1.5rem;
       font-weight: bold;
       font-variant: small-caps;
+      padding: 0 1rem;
     }
   }
 }

@@ -10,7 +10,6 @@ export class printContent {
 
   get pageContent(){
     const mainTitle = document.querySelector('main h1');
-    mainTitle.textContent = !isNaN(this.pageLink) && new reviseDate(+this.pageLink).equalDate ? 'today list' : 'daily to-do list';
     const navExpand = document.querySelector('#navexpand');
     navExpand.textContent = '';
     if(Object.keys(JSON.parse(localStorage.getItem('projList'))).length > 0) this.#expandMenu();
@@ -37,6 +36,7 @@ export class printContent {
       infoDiv.appendChild(infoText);
       infoDiv.appendChild(btnElement);
     }else if(!isNaN(this.pageLink)){
+      mainTitle.textContent = new reviseDate(+this.pageLink).equalDate ? 'today\'s list' : 'daily to-do list';
       if(new createDialog().timeArticles.length === 0){
         const infoDiv = document.createElement('div');
         const infoText = document.createElement('h3');
@@ -246,7 +246,12 @@ export class printContent {
       const part = document.createElement('div');
       part.className = 'articlename';
       const titlePart = document.createElement('h3');
-      titlePart.textContent = key;
+      const navLink = document.createElement('a');
+      navLink.className = 'navlink';
+      navLink.setAttribute('href', '#');
+      navLink.textContent = key;
+      navLink.onclick = () => new printContent(key).pageContent;
+      titlePart.appendChild(navLink);
       part.appendChild(titlePart);
       section.appendChild(part);
       JSON.parse(localStorage.getItem('todoList'))[key].forEach(item => {
@@ -352,7 +357,7 @@ export class printContent {
           const notifyBtn = document.createElement('button');
           notifyBlock.className = 'alert';
           notifySpan.textContent = key;
-          notifyNote.textContent = ' time expires: ';
+          notifyNote.textContent = ' Time expires: ';
           notifyTime.textContent = new reviseDate(new Date(+projObj[key][0]).valueOf()).intlFullDate;
           notifyBtn.className = 'dialogBtn';
           notifyBtn.dataset.projlink = key;
