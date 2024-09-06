@@ -10,7 +10,7 @@ export class printContent {
 
   get pageContent(){
     const mainTitle = document.querySelector('main h1');
-    mainTitle.textContent = 'daily to-do list';
+    mainTitle.textContent = !isNaN(this.pageLink) && new reviseDate(+this.pageLink).equalDate ? 'today list' : 'daily to-do list';
     const navExpand = document.querySelector('#navexpand');
     navExpand.textContent = '';
     if(Object.keys(JSON.parse(localStorage.getItem('projList'))).length > 0) this.#expandMenu();
