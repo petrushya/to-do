@@ -23,7 +23,7 @@ const config = {
     plugins: [
         new HtmlWebpackPlugin({
             template: 'index.html',
-            filename: 'to-do.html',
+            filename: 'index.html',
             title: 'ROUTINE - to-do'
         }),
 
