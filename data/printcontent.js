@@ -12,7 +12,7 @@ export class printContent {
     const mainTitle = document.querySelector('main h1');
     const navExpand = document.querySelector('#navexpand');
     navExpand.textContent = '';
-    if(Object.keys(JSON.parse(localStorage.getItem('projList'))).length > 0) this.#expandMenu();
+    if(Object.keys(JSON.parse(localStorage.getItem('projList'))).length > 0) this.mainMenu;
     if(document.querySelector('button[data-btnname="dialogBtn"]')) document.querySelector('button[data-btnname="dialogBtn"]').remove();
     const section = document.querySelector('section');
     section.textContent = '';
@@ -275,10 +275,23 @@ export class printContent {
     };
   }
 
-  #expandMenu(){
+  get mainMenu(){
     const navExpand = document.querySelector('#navexpand');
     navExpand.textContent = '';
     const olList = document.createElement('ol');
+    navExpand.appendChild(olList);
+    const btnTodayLi = document.createElement('li');
+    const btnTodayElement = document.createElement('button');
+    btnTodayElement.className = 'topmenu';
+    btnTodayElement.name = 'today\'s list';
+    btnTodayElement.type = 'button';
+    btnTodayElement.textContent = 'today\'s list';
+    olList.appendChild(btnTodayLi);
+    btnTodayLi.appendChild(btnTodayElement);
+    btnTodayElement.onclick = () => {
+      btnTodayElement.blur();
+      new printContent(new Date().getTime()).pageContent;
+    };
     const btnLi = document.createElement('li');
     const btnElement = document.createElement('button');
     btnElement.className = 'topmenu';
@@ -286,7 +299,6 @@ export class printContent {
     btnElement.name = 'new topic';
     btnElement.type = 'button';
     btnElement.textContent = '+ new topic';
-    navExpand.appendChild(olList);
     olList.appendChild(btnLi);
     btnLi.appendChild(btnElement);
     btnElement.onclick = () => {

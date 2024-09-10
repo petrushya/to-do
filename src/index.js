@@ -1,7 +1,7 @@
 import '../assets/style.css';
 import brand from '../assets/brand.svg';
 import icon from '../assets/minima-social-icons.svg';
-import { reviseDate } from '../data/revisedate.js'; // to record examples
+import { reviseDate } from '../data/revisedate.js';
 import { articlesData } from '../data/writearticle.js';
 import { printContent } from '../data/printcontent.js';
 
@@ -25,23 +25,17 @@ logo.height = '50';
 headerNode.appendChild(logo);
 new printContent(new Date().getTime()).pageContent;
 
-const todayBtn = document.querySelector('button[data-link="today"]');
-todayBtn.onclick = () => {
-  todayBtn.blur();
-  new printContent(new Date().getTime()).pageContent;
-}
-
 const footerNode = document.querySelector('#footerContent');
+const p = document.createElement('p');
 const link = document.createElement('a');
 link.setAttribute('href', 'https://github.com/petrushya/to-do');
 link.setAttribute('rel', 'noopener noreferrer');
-const p = document.createElement('p');
 const imgIcon = new Image;
 imgIcon.src = icon;
 imgIcon.width = '28';
 imgIcon.height ='28';
-footerNode.appendChild(p);
 p.appendChild(link);
 link.appendChild(imgIcon);
+footerNode.appendChild(p);
 
 

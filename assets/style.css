@@ -71,22 +71,13 @@ button{
   column-gap: 1vi;
   z-index: 1;
 }
-.pagenav ol{
-  display: flex;
-  column-gap: 1vi;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-button[data-link="today"], #btnexpand{
+.topmenu{
+  inline-size:14.05ch;
   border-radius: 0;
   border: thin solid #3a0050;
   background-color: #fff;
 }
-#btnexpand{
-  inline-size:14.05ch;
-}
-#btnexpand:focus{
+.topmenu:focus{
   outline: thin solid #0000ff;
 }
 #navexpand{
@@ -95,34 +86,28 @@ button[data-link="today"], #btnexpand{
   block-size: 1.5lh;
   z-index: -1;
   transition: 300ms;
+  & ol{
+    inline-size: 100%;
+    list-style: none;
+    padding: 0.5rem 0 0;
+    margin: 0;
+    background-color: #fff;
+  }
   & li{
     rotate: x 90deg;
     block-size: 0;
-    padding-block-start: 0;
+    padding: 0;
     transition: 300ms;
-  }
-  & button{
-    inline-size:14ch;
-    border-radius: 0;
-    border: thin solid #3a0050;
-    background-color: #fff;
-    &:focus{
-      outline: thin solid #0000ff;
-    }
   }
 }
 #btnexpand:is(:hover, :focus) + #navexpand, #btnexpand + #navexpand:is(:hover, :focus-within){
   top: 7lh;
-  block-size: 6.5lh;
+  block-size: 7lh;
   & li{
     rotate: x 0deg;
     padding-block-start: 0.5rem;
     block-size: auto;
   }
-}
-#navexpand ol{
-  flex-direction: column;
-  background-color: #fff;
 }
 section{
   border-block-end: thick double #3a0050;
