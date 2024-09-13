@@ -1,9 +1,9 @@
-import '../assets/style.css';
-import brand from '../assets/brand.svg';
-import icon from '../assets/minima-social-icons.svg';
-import { reviseDate } from '../data/revisedate.js';
-import { articlesData } from '../data/writearticle.js';
-import { printContent } from '../data/printcontent.js';
+import './style.css';
+import brand from './assets/brand.svg';
+import icon from './assets/minima-social-icons.svg';
+import { reviseDate } from './data/revisedate.js';
+import { articlesData } from './data/writearticle.js';
+import { printContent } from './data/printcontent.js';
 
 localStorage.clear();
 new articlesData('routine',[`${new Date(new reviseDate(Date()).sortFullDate).valueOf() - 30*60*1000}`,'','','daily job']).addArticleData;
