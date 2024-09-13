@@ -84,7 +84,7 @@ button{
 }
 #navexpand{
   position: absolute;
-  top: 5.5lh;
+  top: 6lh;
   block-size: 1.5lh;
   transition: 300ms;
   z-index: 1;
