@@ -1,0 +1,272 @@
+:root {
+  color-scheme: dark light;
+  --main-color: fieldtext;
+  --gray-color: graytext;
+  --red-color: activetext;
+  --top-color: color-mix(in hsl, highlight 32%, field);
+  --light-gray-color: color-mix(in hsl, buttonface 48%, field);
+  --start-color: color-mix(in hsl, mark 64%, linktext);
+  --warn-color: color-mix(in hsl, activetext 28%, field);
+
+  font-family: sans-serif;
+  color: var(--main-color);
+  box-sizing: border-box;
+}
+h1 {
+  align-self: center;
+  font-size: 2.25rem;
+  margin: 0.25em 0;
+}
+h2 {
+  font-size: 2rem;
+  margin: 0;
+  font-style: italic;
+}
+h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  font-style: italic;
+  font-variant: small-caps;
+  text-align: center;
+}
+.wrapper {
+  max-inline-size: 80ch;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.sticky {
+  position: sticky;
+  top: 0;
+  border-block-end: thin solid var(--gray-color);
+  padding-block-end: 10px;
+  background-color: field;
+}
+header, .rowDiv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 0.5vi;
+  padding: 0.5rem 0.5vi;
+}
+.rowDiv:first-child {
+  flex-wrap: nowrap;
+}
+header {
+  background-color: var(--top-color);
+}
+header button:nth-child(-n + 4) {
+  flex: 1;
+  line-height: 1;
+}
+button {
+  font-weight: bold;
+  font-size: 1.125rem;
+  padding: 0.25rem 0.75rem;
+  line-height: 1;
+  background: unset;
+  border: thin solid buttonborder;
+  cursor: pointer;
+  &:hover, &:focus {
+    background-color: buttonface;
+  }
+}
+#colorScheme {
+  border-radius: 50vh;
+  padding-block-start: 0.35rem;
+  padding-block-end: 0.6rem;
+  &::before {
+    content: '\25d1';
+    padding-inline-end: 0.125rem;
+    font-size: 1.5rem;
+    line-height: 0.75;
+  }
+}
+main {
+  min-block-size: 87vb;
+  display: flex;
+  flex-direction: column;
+}
+.startTitle, .startProject {
+  min-block-size: 87vb;
+  align-content: center;
+  padding: 0 0.5rem;
+  text-align: center;
+  & button {
+    margin-block-start: 1.5rem;
+    padding: 0.5rem;
+  }
+}
+.startProject {
+  min-block-size: 80vb;
+  border-block-start: medium double var(--gray-color);
+}
+.flexDate {
+  display: flex;
+  justify-content: center;
+  column-gap: 2ch;
+}
+.displayed {
+  display: none;
+}
+#changeDateList {
+  font-size: 1.5rem;
+  padding: 0.25em 7.5vi;
+  border-block-start: medium double var(--gray-color);
+  & button {
+    flex:1;
+    font-size: 2rem;
+    line-height: 0.75;
+    padding-block-end: 0.4rem;
+    border-color: var(--light-gray-color);
+  }
+}
+#timeChList {
+  margin: 0;
+  flex: 5;
+  text-align: center;
+}
+.invisible {
+  visibility: hidden;
+}
+section {
+  border: unset;
+  border-block-end: thin solid var(--gray-color);
+}
+section > .rowDiv {
+  padding: 0.25rem 0.5vi;
+}
+section > .rowDiv.head p:nth-child(3) {
+  flex: 2;
+  text-align: center;
+  color: var(--red-color);
+  font-size: 1.375rem;
+  margin: 0;
+}
+section > .rowDiv > button{
+  padding: 0.125rem 0.75rem;
+  vertical-align: top;
+  flex: 3;
+}
+section > .rowDiv.warn > button {
+  padding: 0.5rem 0.75rem;
+}
+article .rowDiv > button {
+  padding: 0.5rem 0.75rem;
+  &:first-child {
+    flex: 3;
+  }
+}
+article .rowDiv.head > p:nth-child(3){
+  flex: 2;
+  text-align: center;
+  color: var(--red-color);
+  font-size: 1.375rem;
+  margin: 0;
+}
+.dayHead {
+  padding: 0.25rem 0;
+  border-block-start: thick double var(--gray-color);
+}
+.head {
+  background-color: var(--light-gray-color);
+  border-block-start: medium double var(--gray-color);
+  & button {
+    flex: 2;
+  }
+  & h3 {
+    flex: 8;
+  }
+}
+input[type='checkBox'] {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+p time {
+  border: thick solid var(--light-gray-color);
+}
+p.rowDiv {
+  padding: 0;
+  & span:first-child {
+    flex: 12;
+    padding-inline-start: 0.5rem;
+  }
+  & time {
+    flex: 3;
+    text-align: center;
+  }
+}
+.warn {
+  background-color: var(--warn-color);
+  & p {
+    flex: 10;
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+  }
+}
+.decoration {
+  margin: 0;
+  flex: 12;
+}
+.rowDiv.warn button{
+  flex: 2;
+}
+.bodyLine {
+  flex-wrap: wrap;
+  padding: 0 0.5vi;
+  border-block-start: thin solid var(--gray-color);
+  & p {
+    padding: 0.5rem 0;
+    margin: 0;
+  }
+  & p:last-child {
+    width: 100%;
+    border-block-start: thin solid var(--top-color);
+  }
+}
+.checkable {
+  text-decoration: solid line-through var(--main-color) 0.25rem;
+}
+.spanBold {
+  font-weight: bold;
+  font-size: 1.0625em;
+}
+.during {
+  border: thick solid mark;
+}
+.forgot {
+  border: thick solid var(--red-color);
+}
+.startWork {
+  border: thick solid var(--start-color);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1ch;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  margin-block-end: 1.5ch;
+}
+label:nth-child(3) {
+  flex-direction: row;
+  column-gap: 0.5ch;
+}
+form > div{
+  display: flex;
+  justify-content: space-between;
+  column-gap: 2ch;
+  & > button {
+    flex: 1;
+  }
+}
+fieldset > button {
+  display: block;
+  margin: 2ch auto 0;
+}
+.error {
+  outline: 0.25ch solid var(--red-color);
+  outline-offset: 0.25ch;
+}
